@@ -21,7 +21,7 @@ Use these prepared product details:
 
 Product IDs cannot be changed/reused after creation. Leave the product unavailable for general sale until native billing, verification, restore and licensed internal-track tests are complete. No code in the current app grants Pro or charges a purchase yet.
 
-Google requires the BILLING manifest permission for in-app products. Version 53 does not declare it; if the console asks for a billing-enabled upload, an internal setup bundle is needed before the product can be configured. This is a prerequisite, not evidence that purchases work.
+Google requires the BILLING manifest permission for in-app products. Version 53 does not declare it. A separate version 54 / `0.21.0-setup` bundle adds current Play Billing 9.1.0 and that permission solely for internal setup. Upload the `internal-billing-setup.aab` file to an internal testing release if Play Console requests a billing-enabled upload. It has no purchase flow or enabled paywall, and is not the final monetized production release.
 
 ## AdMob
 
