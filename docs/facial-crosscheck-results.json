@@ -1,0 +1,162 @@
+{
+  "kind": "synthetic channel isolation; not human-camera recognition validation",
+  "sections": 14,
+  "passed": 14,
+  "limits": "Visual scores and personal-cheek scores are fixtures in this matrix. Separate synthetic pixel/appearance unit tests exercise those algorithms. No real participant, precision/recall, false-trigger or latency result is claimed.",
+  "rows": {
+    "mouth_open": {
+      "label": "Jaw drop (mouth opening)",
+      "expected": [
+        "mouth_open"
+      ],
+      "observed": [
+        "mouth_open"
+      ],
+      "unexpected": [],
+      "passed": true
+    },
+    "mouth_close": {
+      "label": "Quick mouth closure",
+      "expected": [
+        "mouth_close"
+      ],
+      "observed": [
+        "mouth_close"
+      ],
+      "unexpected": [],
+      "passed": true
+    },
+    "blink": {
+      "label": "Deliberate eye blink",
+      "expected": [
+        "blink"
+      ],
+      "observed": [
+        "blink"
+      ],
+      "unexpected": [],
+      "passed": true
+    },
+    "brows_up": {
+      "label": "Eye widening",
+      "expected": [
+        "brows_up"
+      ],
+      "observed": [
+        "brows_up"
+      ],
+      "unexpected": [],
+      "passed": true
+    },
+    "smile": {
+      "label": "Closed-lip smile",
+      "expected": [
+        "smile"
+      ],
+      "observed": [
+        "smile"
+      ],
+      "unexpected": [],
+      "passed": true
+    },
+    "teeth": {
+      "label": "Teeth baring",
+      "expected": [
+        "teeth"
+      ],
+      "observed": [
+        "teeth"
+      ],
+      "unexpected": [],
+      "passed": true
+    },
+    "cheek_puff": {
+      "label": "Cheek puff",
+      "expected": [
+        "cheek_puff"
+      ],
+      "observed": [
+        "cheek_puff"
+      ],
+      "unexpected": [],
+      "passed": true
+    },
+    "tongue_out": {
+      "label": "Tongue protrusion",
+      "expected": [
+        "tongue_out"
+      ],
+      "observed": [
+        "tongue_out"
+      ],
+      "unexpected": [],
+      "passed": true
+    },
+    "wink_left": {
+      "label": "Left eye wink",
+      "expected": [
+        "wink_left"
+      ],
+      "observed": [
+        "wink_left"
+      ],
+      "unexpected": [],
+      "passed": true
+    },
+    "wink_right": {
+      "label": "Right eye wink",
+      "expected": [
+        "wink_right"
+      ],
+      "observed": [
+        "wink_right"
+      ],
+      "unexpected": [],
+      "passed": true
+    },
+    "face_scrunch": {
+      "label": "Face scrunch",
+      "expected": [
+        "face_scrunch"
+      ],
+      "observed": [
+        "face_scrunch"
+      ],
+      "unexpected": [],
+      "passed": true
+    },
+    "head_tilt": {
+      "label": "Head tilt",
+      "expected": [
+        "head_tilt"
+      ],
+      "observed": [
+        "head_tilt"
+      ],
+      "unexpected": [],
+      "passed": true
+    },
+    "head_nod": {
+      "label": "Head nod",
+      "expected": [
+        "head_nod"
+      ],
+      "observed": [
+        "head_nod"
+      ],
+      "unexpected": [],
+      "passed": true
+    },
+    "head_shake": {
+      "label": "Head shake",
+      "expected": [
+        "head_shake"
+      ],
+      "observed": [
+        "head_shake"
+      ],
+      "unexpected": [],
+      "passed": true
+    }
+  }
+}

@@ -1,0 +1,9 @@
+# Camera quality - 0.13.3
+
+The previous camera stream was capped at 1920x1080, and composite recordings were capped at 720 pixels wide. The camera now chooses the largest advertised approximately 16:9 SurfaceTexture output with minimum frame duration compatible with at least 24 fps, bounded by 7680x4320. It uses supported automatic exposure, white balance and continuous video focus, plus FAST edge enhancement and noise reduction when advertised. Orientation and game geometry remain unchanged.
+
+The connected Samsung SM-A176B advertises 4128x2322 at 33331760 ns minimum frame duration. Its active Camera2 session was verified ACTIVE with output dimensions 4128x2322. It exposes no 7680x4320 front preview output. This is a preview-buffer verification, not proof of optical resolving power or an 8K recording claim. Samsung's standard video specification lists FHD recording.
+
+Composite recordings now preserve the existing full-screen framing and fit within a 1080-short-edge / 1920-long-edge envelope, without upscaling the view. AVC encoder dimensions, alignments, frame rate and bitrate are checked. Lower resolutions are selected for limited encoders. The existing compositing pipeline remains 24 fps; full camera-buffer resolution is not the saved video resolution. Bitrate scales with the selected frame dimensions, capped at 14 Mbps. Higher resolutions increase processing and file size; sustained real gameplay performance and perceived quality need user evaluation.
+
+Validation: offline debug/test build and lint passed. Native capability checks passed for portrait, tall portrait and landscape framing. A real AVC MP4 was encoded and decoded at 886x1920, 11907840 bps configured, with pause/resume and orientation marker checks passing. All test frames were synthetic; no face or microphone was recorded. Version 31 / 0.13.3-camera installed and launched on the connected phone. Test package removed.

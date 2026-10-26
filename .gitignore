@@ -1,0 +1,40 @@
+.godot/
+.venv/
+__pycache__/
+recognition/models/*.task
+recognition/profiles/
+*.log
+dist/
+android-app/.gradle/
+android-app/build/
+android-app/app/build/
+android-app/local.properties
+
+# Private Android upload-signing identity; never commit or upload these.
+android-app/release-signing/
+*.jks
+*.keystore
+*.p12
+**/keystore.properties
+
+# Isolated GitHub Pages publishing worktree
+_publish/
+
+# Local checks, device captures and generated exports (source artwork stays in app/src).
+.gradle/
+*.class
+android-app/checks/out/
+/android-app/*.png
+/android-app/*.jpg
+/store-assets/raw-store-captures/
+/store-assets/social-promo/
+/store-assets/**/*.png
+/store-assets/**/*.jpg
+/store-assets/**/*.jpeg
+/store-assets/**/*.wav
+/store-assets/**/*.mp4
+*.apk
+*.aab
+*.apks
+.env
+.env.*

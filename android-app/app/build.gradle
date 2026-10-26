@@ -1,0 +1,45 @@
+plugins { id 'com.android.application' }
+def uploadProperties = new Properties()
+def uploadPropertiesFile = rootProject.file('release-signing/upload.properties')
+if (uploadPropertiesFile.isFile()) uploadPropertiesFile.withInputStream { uploadProperties.load(it) }
+gradle.taskGraph.whenReady { graph ->
+    if (graph.allTasks.any { it.name in ['bundleRelease', 'assembleRelease', 'validateSigningRelease'] } && !uploadPropertiesFile.isFile()) {
+        throw new GradleException('Upload signing is missing. Restore release-signing/upload.properties and its keystore; do not replace an existing upload identity.')
+    }
+}
+android {
+    namespace 'com.facechaos.mobile'
+    compileSdk 36
+    defaultConfig {
+        applicationId 'com.facechaos.mobile'
+        minSdk 26
+        targetSdk 36
+        versionCode 53
+        versionName '0.20.0'
+        testInstrumentationRunner 'com.facechaos.mobile.SceneCheck'
+    }
+    signingConfigs {
+        upload {
+            if (uploadPropertiesFile.isFile()) {
+                storeFile rootProject.file(uploadProperties.getProperty('storeFile'))
+                storePassword uploadProperties.getProperty('storePassword')
+                keyAlias uploadProperties.getProperty('keyAlias')
+                keyPassword uploadProperties.getProperty('keyPassword')
+            }
+        }
+    }
+    buildTypes {
+        release {
+            debuggable false
+            jniDebuggable false
+            minifyEnabled false
+            signingConfig signingConfigs.upload
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies { implementation "com.google.mediapipe:tasks-vision:0.10.32" }

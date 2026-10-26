@@ -1,0 +1,5 @@
+# Animal and lantern atlas — Android 0.7.0
+
+Generated using the built-in imagegen tool. Saved resource: android-app/app/src/main/res/drawable-nodpi/animal_atlas.png. The original RGBA alpha is preserved; the game and instruction cards use source rectangles.
+
+Prompt: Production sprite atlas for Face Chaos mobile selfie overlay, landscape 1536x1024, genuine transparent alpha. Six isolated soft dimensional clay-toy sprites in three columns by two rows, generous padding. Top: seated caramel puppy with floppy ears and open woof mouth; seated cream kitten with lavender collar and open meow mouth; mint-blue songbird with peach beak open and wings slightly spread. Bottom: rounded lilac hanging lantern with golden glass, handle and base; cute golden firefly with mint translucent wings; mint closed flower bud in peach pot. Consistent cheerful 3D quality, gold/peach/mint/lilac palette, expressive eyes, no lettering, numbers, panels, backdrop, ground plane or baked checkerboard. Same artwork in games and instruction cards.

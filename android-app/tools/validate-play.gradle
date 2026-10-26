@@ -1,0 +1,24 @@
+// Use the exact bundletool dependency supplied by the installed Android Gradle plugin.
+gradle.projectsEvaluated {
+    def root = gradle.rootProject
+    def bundle = new File(root.projectDir, 'app/build/outputs/bundle/release/app-release.aab')
+    def output = new File(root.projectDir.parentFile, 'dist')
+    output.mkdirs()
+    root.tasks.register('validatePlayBundle', JavaExec) {
+        classpath = root.buildscript.configurations.classpath
+        mainClass = 'com.android.tools.build.bundletool.BundleToolMain'
+        args 'validate', "--bundle=${bundle.absolutePath}"
+    }
+    root.tasks.register('dumpPlayManifest', JavaExec) {
+        classpath = root.buildscript.configurations.classpath
+        mainClass = 'com.android.tools.build.bundletool.BundleToolMain'
+        args 'dump', 'manifest', "--bundle=${bundle.absolutePath}", '--module=base'
+        standardOutput = new FileOutputStream(new File(output, 'FaceChaos-release-manifest.xml'))
+    }
+    root.tasks.register('dumpPlayConfig', JavaExec) {
+        classpath = root.buildscript.configurations.classpath
+        mainClass = 'com.android.tools.build.bundletool.BundleToolMain'
+        args 'dump', 'config', "--bundle=${bundle.absolutePath}"
+        standardOutput = new FileOutputStream(new File(output, 'FaceChaos-bundle-config.json'))
+    }
+}

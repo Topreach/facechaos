@@ -1,0 +1,5 @@
+# Collection atlas — Android 0.6.0
+
+Generated with the built-in imagegen tool. Saved resource: android-app/app/src/main/res/drawable-nodpi/collection_atlas.png. RGBA transparency is preserved; game code uses source rectangles. The atlas supplies Snack Parade, Smile Stack and Comet Launch gameplay and matching instructions.
+
+Prompt: Original polished soft 3D clay toy sprites for Face Chaos mobile selfie-overlay minigames, landscape 1536x1024 with true alpha transparency. Exactly six isolated objects in a three-column by two-row grid with padding. Top: adorable mint ceramic snack bowl with smile, peach cheeks and feet; juicy friendly strawberry with mint leaves; playful coral chilli pepper with green stem. Bottom: compact tower of thick yellow/pink/mint rounded toy blocks with star inset; mint-and-cream rocket with peach window, lilac fins and golden flame; lavender moon planet with golden star. Consistent dimensional lighting and gold-peach casual-game quality, no text, labels, panels, background, grid lines or baked checkerboard. Shared between gameplay and tutorial.
