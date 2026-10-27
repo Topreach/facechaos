@@ -9,7 +9,7 @@ root = Path(__file__).resolve().parents[1]
 source = root / "app/src/main/java/com/facechaos/mobile"
 output = root / "checks/out"
 output.mkdir(parents=True, exist_ok=True)
-classes = "AnimalGuide AnimalPatterns CommercialPolicy FaceGameInput FaceSignals FlagQuiz GameCatalog GameSections HeadSignals MelodyCourse MiniGame OverlayLayout PreviewGeometry RacingGame RatingPolicy SoundEvents SoundGate SpeechPolicy StageRules TeethEvidence VoiceCourse".split()
+classes = "AdaptiveViewport AnimalGuide AnimalPatterns CommercialPolicy FaceGameInput FaceSignals FlagQuiz GameCatalog GameSections HeadSignals MelodyCourse MiniGame OverlayLayout PreviewGeometry RacingGame RatingPolicy SoundEvents SoundGate SpeechPolicy StageRules TeethEvidence VoiceCourse".split()
 checks = sorted((root / "checks").glob("*Check.java"))
 
 def java_tool(name):

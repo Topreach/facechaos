@@ -14,8 +14,8 @@ android {
         applicationId 'com.facechaos.mobile'
         minSdk 26
         targetSdk 36
-        versionCode 54
-        versionName '0.21.0-setup'
+        versionCode 55
+        versionName '0.21.0-setup.1'
         testInstrumentationRunner 'com.facechaos.mobile.SceneCheck'
     }
     signingConfigs {
@@ -43,6 +43,8 @@ android {
 }
 
 dependencies {
+    // Play Services brings Fragment 1.1.0 transitively; select the maintained release.
+    implementation "androidx.fragment:fragment:1.9.1"
     // Align legacy jdk7/jdk8 stdlib modules from vision dependencies with Billing.
     implementation platform("org.jetbrains.kotlin:kotlin-bom:1.8.22")
     implementation "com.google.mediapipe:tasks-vision:0.10.32"

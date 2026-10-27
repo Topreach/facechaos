@@ -17,6 +17,8 @@ Android camera-overlay mini-games controlled with facial expressions, head movem
 
 ## Build and test
 
+The quality-fix branch builds version 55 (`0.21.0-setup.1`), with updated Fragment and adaptive orientation/resizing support. It retains the inactive billing setup foundation; see [changes and device verification](docs/PLAY_QUALITY_055.md).
+
 Use Android SDK 36 and Java 17 or newer. From `android-app`:
 
 ```powershell

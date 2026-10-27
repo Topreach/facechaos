@@ -19,6 +19,10 @@ assert manifest.attrib[ns + "versionCode"] == expected_code
 assert manifest.attrib[ns + "versionName"] == expected_name
 assert manifest.find("application").attrib.get(ns + "debuggable", "false") == "false"
 assert manifest.find("uses-sdk").attrib[ns + "targetSdkVersion"] == "36"
+activity = manifest.find("application/activity")
+assert activity.attrib.get(ns + "resizeableActivity") == "true"
+assert ns + "screenOrientation" not in activity.attrib
+assert ns + "maxAspectRatio" not in activity.attrib
 config = json.loads((out / "FaceChaos-bundle-config.json").read_text())
 assert config["optimizations"]["uncompressNativeLibraries"]["alignment"] == "PAGE_ALIGNMENT_16K"
 report = []

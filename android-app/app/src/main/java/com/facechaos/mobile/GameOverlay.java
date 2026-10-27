@@ -44,6 +44,7 @@ final class GameOverlay extends View {
  private void card(Canvas c,float x,float y,float w,float h,int color){p.setShader(null);p.setStyle(Paint.Style.FILL);p.setColor(color);c.drawRoundRect(x,y,x+w,y+h,20,20,p);}
  private void star(Canvas c,float x,float y,float r,int color){Path path=new Path();for(int i=0;i<10;i++){double a=-Math.PI/2+i*Math.PI/5;float v=i%2==0?r:r*.46f;float px=x+(float)Math.cos(a)*v,py=y+(float)Math.sin(a)*v;if(i==0)path.moveTo(px,py);else path.lineTo(px,py);}path.close();p.setColor(color);c.drawPath(path,p);}
  private void hero(Canvas c,float x,float y,int accent){p.setAlpha(255);p.setShader(new LinearGradient(x-28,y-28,x+28,y+28,0xFFFFF6C1,accent,Shader.TileMode.CLAMP));c.drawCircle(x,y,28,p);p.setShader(null);p.setColor(0xFF173E42);c.drawCircle(x-9,y-5,3,p);c.drawCircle(x+9,y-5,3,p);if(game.mode==0&&game.target()==0){c.drawOval(x-7,y+1,x+7,y+17,p);}else if(game.mode==0&&game.target()==2){p.setColor(Color.WHITE);c.drawRoundRect(x-14,y+2,x+14,y+15,4,4,p);p.setColor(0xFF173E42);p.setStrokeWidth(1);for(int i=-8;i<=8;i+=8)c.drawLine(x+i,y+2,x+i,y+15,p);c.drawLine(x-13,y+8,x+13,y+8,p);}else{p.setStyle(Paint.Style.STROKE);p.setStrokeWidth(2.5f);c.drawArc(x-10,y+1,x+10,y+14,0,180,false,p);p.setStyle(Paint.Style.FILL);}}
+ @Override protected void onSizeChanged(int w,int h,int oldw,int oldh){super.onSizeChanged(w,h,oldw,oldh);last=0;}
  @Override protected void onDraw(Canvas c){
   super.onDraw(c);if(getWidth()==0)return;
   long now=SystemClock.elapsedRealtime();if(last!=0)game.step((now-last)/1000f);last=now;saveCoins();

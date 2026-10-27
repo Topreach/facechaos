@@ -115,7 +115,8 @@ public final class MainActivity extends Activity {
                 if(preview.getBitmap(videoFrame)==null)throw new IllegalStateException("No camera frame");
                 if(overlay.getVisibility()==View.VISIBLE){
                     Canvas canvas=new Canvas(videoFrame);canvas.save();
-                    canvas.scale(videoFrame.getWidth()/(float)overlay.getWidth(),videoFrame.getHeight()/(float)overlay.getHeight());
+                    canvas.scale(videoFrame.getWidth()/(float)preview.getWidth(),videoFrame.getHeight()/(float)preview.getHeight());
+                    canvas.translate(overlay.getLeft()-preview.getLeft(),overlay.getTop()-preview.getTop());
                     overlay.draw(canvas);canvas.restore();
                 }
                 encoder.submit(videoFrame,System.nanoTime());
@@ -194,8 +195,19 @@ public final class MainActivity extends Activity {
         controls.addView(cameraBar);
         controls.addOnLayoutChangeListener((v, left, top, right, bottomEdge, oldLeft, oldTop, oldRight, oldBottom) ->
             overlay.setBottomReserved(bottomEdge - top));
-        FrameLayout.LayoutParams bottom = new FrameLayout.LayoutParams(-1, -2, Gravity.BOTTOM);
+        FrameLayout.LayoutParams bottom = new FrameLayout.LayoutParams(-1, -2, Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL);
         root.addView(controls, bottom);
+        root.addOnLayoutChangeListener((v,l,t,r,b,ol,ot,or,ob)->{
+            int width=r-l,height=b-t;
+            float density=getResources().getDisplayMetrics().density;
+            int gameWidth=AdaptiveViewport.overlayWidth(width,height,density);
+            FrameLayout.LayoutParams gameParams=(FrameLayout.LayoutParams)overlay.getLayoutParams();
+            if(gameParams.width!=gameWidth){gameParams.width=gameWidth;gameParams.gravity=Gravity.TOP|Gravity.CENTER_HORIZONTAL;overlay.setLayoutParams(gameParams);}
+            int controlWidth=AdaptiveViewport.controlsWidth(width,density);
+            FrameLayout.LayoutParams controlParams=(FrameLayout.LayoutParams)controls.getLayoutParams();
+            if(controlParams.width!=controlWidth){controlParams.width=controlWidth;controls.setLayoutParams(controlParams);}
+            if(or>ol&&ob>ot&&(width!=or-ol||height!=ob-ot))pauseForWindowChange();
+        });
         root.setOnApplyWindowInsetsListener((v, insets) -> {
             if (android.os.Build.VERSION.SDK_INT >= 30) {
                 android.graphics.Insets safe = insets.getInsets(android.view.WindowInsets.Type.systemBars() | android.view.WindowInsets.Type.displayCutout());
@@ -922,6 +934,17 @@ public final class MainActivity extends Activity {
     }
     private void requestCamera() { requestPermissions(new String[]{Manifest.permission.CAMERA}, 10); }
     private void requestGamePermission(String[] permissions,int request){permissionGeneration=gameGeneration;requestPermissions(permissions,request);}
+    private void pauseForWindowChange(){
+        if(camera==null)return;
+        setRoundPaused(true);stopAnimalGuide();stopCountrySpeech();
+        if(encoder!=null)stopVideo(null);
+    }
+    @Override public void onConfigurationChanged(android.content.res.Configuration configuration){
+        super.onConfigurationChanged(configuration);
+        pauseForWindowChange();
+        camera.stop();
+        preview.post(()->{if(resumed&&checkSelfPermission(Manifest.permission.CAMERA)==PackageManager.PERMISSION_GRANTED)camera.start();});
+    }
     @Override protected void onResume() {
         super.onResume(); resumed = true;ui.removeCallbacks(tick);ui.post(tick);if(faceLab)startFaceRecognition();
         if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) camera.start();
