@@ -32,6 +32,8 @@ android {
         release {
             debuggable false
             jniDebuggable false
+            // Collect symbols when dependency vendors supply unstripped libraries.
+            ndk { debugSymbolLevel 'SYMBOL_TABLE' }
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
