@@ -138,6 +138,8 @@
     <string name="fc_brief12">Le volume contrôle l’accélérateur : son doux pour ralentir, son plus fort mais confortable pour accélérer. Le silence laisse rouler. Battez l’ordinateur sans crier.</string>
     <string name="fc_brief13">Centrez la tête pour calibrer puis bougez à gauche ou à droite vers la voie libre. Revenez au centre pour la voie du milieu. Évitez les voitures. La perte de suivi les arrête ; les étapes suivantes accélèrent.</string>
     <string name="fc_brief14">Regardez le drapeau et dites ou écrivez le pays en anglais. Une bonne réponse rapporte une pièce et affiche le suivant. La reconnaissance vocale reste en anglais quelle que soit la langue de l’interface.</string>
+    <string name="fc_games_short">Jeux</string>
+    <string name="fc_clip_short">Vidéo</string>
     <string name="fc_close_game_question">Voulez-vous fermer ce jeu ?</string>
     <string name="fc_close_game_note">Votre partie en cours se terminera. Vous pourrez ensuite choisir un autre jeu.</string>
     <string name="fc_yes">Oui</string>

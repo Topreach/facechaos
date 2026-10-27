@@ -138,6 +138,8 @@
     <string name="fc_brief12">Your sound volume controls the car accelerator. Soft sound is slower; a stronger comfortable sound is faster. Quiet lets the car coast. Beat the computer to the finish. No shouting is needed.</string>
     <string name="fc_brief13">Centre your head to calibrate, then move left or right toward the clear lane. Return to centre for the middle lane. Dodge oncoming traffic. Tracking loss pauses the cars; faster stages bring harder traffic.</string>
     <string name="fc_brief14">Look at each flag and say or type the country name in English. A correct answer earns a coin and shows the next flag. Speech recognition is still English in every interface language; typed answers are also available.</string>
+    <string name="fc_games_short">Games</string>
+    <string name="fc_clip_short">Clip</string>
     <string name="fc_close_game_question">Do you want to close this game?</string>
     <string name="fc_close_game_note">Your current round will end. You can then choose another game.</string>
     <string name="fc_yes">Yes</string>

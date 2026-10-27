@@ -25,10 +25,17 @@ assert ns + "screenOrientation" not in activity.attrib
 assert ns + "maxAspectRatio" not in activity.attrib
 config = json.loads((out / "FaceChaos-bundle-config.json").read_text())
 assert config["optimizations"]["uncompressNativeLibraries"]["alignment"] == "PAGE_ALIGNMENT_16K"
+dimensions = config["optimizations"]["splitsConfig"].get("splitDimension", [])
+assert any(d.get("value") == "LANGUAGE" and d.get("negate") for d in dimensions), "Translations must be bundled together"
 report = []
 with zipfile.ZipFile(bundle) as archive:
     assert archive.testzip() is None
     names = archive.namelist()
+    assert "BUNDLE-METADATA/com.android.tools.build.obfuscation/proguard.map" in names, "R8 mapping missing"
+    r8 = json.loads(archive.read("BUNDLE-METADATA/com.android.tools/r8.json"))
+    for option in ("isObfuscationEnabled", "isOptimizationsEnabled", "isShrinkingEnabled"):
+        assert r8["options"][option], "Release optimization disabled: " + option
+    assert "base/assets/face_fixture.jpg" not in names, "Verification fixture leaked into release"
     assert "base/assets/face_landmarker.task" in names
     assert not any(n.endswith((".p12", ".jks", ".keystore", "upload.properties")) for n in names)
     for name in names:

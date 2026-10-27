@@ -411,7 +411,7 @@ public final class MainActivity extends Activity {
     private void showTouchControls(boolean wasPaused) {
         if(overlay.game.mode==14){setRoundPaused(false);showFlagAnswerOptions();return;}
         LinearLayout body=new LinearLayout(this);body.setOrientation(LinearLayout.VERTICAL);body.setPadding(dp(20),dp(12),dp(20),dp(12));
-        Switch faces=new Switch(this);faces.setText(overlay.game.mode==13?"Head steering":"Face controls (beta)");faces.setChecked(overlay.game.faceMode);faces.setVisibility(MiniGame.supportsFace(overlay.game.mode)?View.VISIBLE:View.GONE);body.addView(faces);
+        Switch faces=new Switch(this);faces.setText(AppText.t(this,overlay.game.mode==13?"Head steering":"Face controls (beta)"));faces.setChecked(overlay.game.faceMode);faces.setVisibility(MiniGame.supportsFace(overlay.game.mode)?View.VISIBLE:View.GONE);body.addView(faces);
         Switch sound=new Switch(this);sound.setText(AppText.t(MainActivity.this,"Sound controls (optional microphone)"));sound.setChecked(overlay.game.microphoneMode);if(MiniGame.requiresMicrophone(overlay.game.mode)){sound.setChecked(true);sound.setEnabled(false);sound.setText(AppText.t(MainActivity.this,"Microphone required - sound controls only"));}sound.setVisibility(MiniGame.supportsMicrophone(overlay.game.mode)?View.VISIBLE:View.GONE);body.addView(sound);
         Switch reverse=new Switch(this);reverse.setText(AppText.t(MainActivity.this,"Reverse head steering"));reverse.setChecked(reverseHead);reverse.setVisibility(overlay.game.mode==13?View.VISIBLE:View.GONE);body.addView(reverse);
         body.addView(sheetText(overlay.game.mode==11?"Hum gently to guide the firefly toward each lantern. Keep the sound in the gold range, and go quiet to rest. Touches do not control flight. If microphone access is unavailable, choose another game.":overlay.game.mode==8?"Comet Launch is sound-only. Hum gently to charge, go quiet in gold to launch, then watch the landing. No screen hold or release controls.":overlay.game.mode==13?"Switch head steering off for touch-only lanes. Reverse steering if the car moves opposite to your head. Your stage, score and coins stay the same.":overlay.game.mode==12?"Sound Grand Prix remembers its own microphone setting. Stay quiet for the first second, then hum or say aaa: soft sound gives less acceleration, stronger comfortable sound gives more. Switch sound off only to use touch acceleration.":overlay.game.mode==3?"Use your voice: hum or say aaa to rise, go quiet to descend. Switch sound off for touch control. Voice Runner remembers this choice separately; calibration pauses flight.":"Switch face and sound off for touch-only play. Your stage, score, hearts and coins stay the same. Face mode pauses action if tracking is lost. Teeth detection is experimental.",14,0xFF52736B));
@@ -770,7 +770,7 @@ public final class MainActivity extends Activity {
         gamesButton.setEnabled(!busy);
         boolean canStop=active||game&&!awaitingStart&&!overlay.game.finished;
         playMenu.setVisibility(canStop||lastClip!=null||game?View.VISIBLE:View.INVISIBLE);
-        playMenu.setEnabled(!busy);playMenu.setText(canStop?"■":lastClip!=null?"Clip":"Games");
+        playMenu.setEnabled(!busy);playMenu.setText(canStop?"■":AppText.t(this,lastClip!=null?"Clip":"Games"));
         playMenu.setContentDescription(canStop?"Stop round and finish recording":lastClip!=null?"Review recorded clip":"Choose a game");
         if(active){
             recordState.setVisibility(View.VISIBLE);

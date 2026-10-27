@@ -107,8 +107,6 @@ final class AppText {
   case "Open your mouth":return c.getString(R.string.fc_mouth);
   case "Smile with lips closed":return c.getString(R.string.fc_smile);
   case "Show your teeth":return c.getString(R.string.fc_teeth);
-  case "Open both eyes wide":return c.getString(R.string.fc_wide_eyes);
-  case "Scrunch your face briefly":return c.getString(R.string.fc_face_squeeze);
   case "Blink once to bloom":return c.getString(R.string.fc_blink);
   case "Wait for the gold signal":return c.getString(R.string.fc_wait_gold);
   case "Sound now - low hop":return c.getString(R.string.fc_low_hop);
@@ -129,7 +127,7 @@ final class AppText {
   case "Clear lane: MIDDLE":return c.getString(R.string.fc_middle);
   case "Say the country name in English":return c.getString(R.string.fc_country);
   case "Copy the animal rhythm":return c.getString(R.string.fc_animal);
-  case "Match the expression shown by each approaching gate. Open your mouth, smile with closed lips or show your teeth. Relax between expressions. Each correct gate earns a coin.":return c.getString(R.string.fc_brief0);
+  case "Match each gate: open mouth, closed-lip smile, show teeth, eyes wide open or face squeeze. For wide eyes, open both eyes with a relaxed mouth. For face squeeze, gently scrunch both eyes shut with your cheeks or nose briefly; a normal blink does not count. Relax between expressions. Each correct gate earns a coin.":return c.getString(R.string.fc_brief0);
   case "Follow each obstacle cue. A short sound jumps; stronger volume jumps higher. Smile with closed lips to shield. Show teeth to attack. Act in the gold window and relax afterwards.":return c.getString(R.string.fc_brief1);
   case "Smile to plant a seed, then blink once to bloom. Grow six flowers. Return to a relaxed face between actions.":return c.getString(R.string.fc_brief2);
   case "Hum gently to rise; stay quiet to drift down. Guide the character through approaching gaps in five worlds. Each cleared obstacle earns a coin. Never shout.":return c.getString(R.string.fc_brief3);
@@ -144,6 +142,14 @@ final class AppText {
   case "Your sound volume controls the car accelerator. Soft sound is slower; a stronger comfortable sound is faster. Quiet lets the car coast. Beat the computer to the finish. No shouting is needed.":return c.getString(R.string.fc_brief12);
   case "Centre your head to calibrate, then move left or right toward the clear lane. Return to centre for the middle lane. Dodge oncoming traffic. Tracking loss pauses the cars; faster stages bring harder traffic.":return c.getString(R.string.fc_brief13);
   case "Look at each flag and say or type the country name in English. A correct answer earns a coin and shows the next flag. Speech recognition is still English in every interface language; typed answers are also available.":return c.getString(R.string.fc_brief14);
+  case "Games":return c.getString(R.string.fc_games_short);
+  case "Clip":return c.getString(R.string.fc_clip_short);
+  case "Do you want to close this game?":return c.getString(R.string.fc_close_game_question);
+  case "Your current round will end. You can then choose another game.":return c.getString(R.string.fc_close_game_note);
+  case "Yes":return c.getString(R.string.fc_yes);
+  case "No":return c.getString(R.string.fc_no);
+  case "Open both eyes wide":return c.getString(R.string.fc_wide_eyes);
+  case "Scrunch your face briefly":return c.getString(R.string.fc_face_squeeze);
  default:return source;}}
  static String[] items(Context c,String[] source){String[] result=source.clone();for(int i=0;i<result.length;i++)result[i]=t(c,result[i]);return result;}
  static String brief(Context c,int mode){int[] ids={R.string.fc_brief0,R.string.fc_brief1,R.string.fc_brief2,R.string.fc_brief3,R.string.fc_brief4,R.string.fc_brief5,R.string.fc_brief6,R.string.fc_brief7,R.string.fc_brief8,R.string.fc_brief9,R.string.fc_brief10,R.string.fc_brief11,R.string.fc_brief12,R.string.fc_brief13,R.string.fc_brief14};return c.getString(ids[mode]);}

@@ -138,6 +138,8 @@
     <string name="fc_brief12">O volume controla o acelerador: som suave para andar devagar e som mais forte, mas confortável, para acelerar. O silêncio deixa o carro seguir por inércia. Vença o computador sem gritar.</string>
     <string name="fc_brief13">Centralize a cabeça para calibrar e mova-a à esquerda ou à direita para a faixa livre. Volte ao centro para a faixa central. Desvie dos carros. A perda de rastreamento pausa o trânsito; as fases seguintes são mais rápidas.</string>
     <string name="fc_brief14">Veja a bandeira e diga ou digite o país em inglês. Uma resposta correta vale uma moeda e mostra a próxima. O reconhecimento de voz continua em inglês em todos os idiomas da interface; também é possível digitar.</string>
+    <string name="fc_games_short">Jogos</string>
+    <string name="fc_clip_short">Vídeo</string>
     <string name="fc_close_game_question">Quer fechar este jogo?</string>
     <string name="fc_close_game_note">A partida atual terminará. Depois poderá escolher outro jogo.</string>
     <string name="fc_yes">Sim</string>
