@@ -16,7 +16,7 @@ for index, language in enumerate(("en", "ar", "fr", "es", "pt")):
     folder.mkdir(exist_ok=True)
     lines = ['<?xml version="1.0" encoding="utf-8"?>', '<resources>']
     for key, values in data.items():
-        value = html.escape(values[index], quote=False).replace("'", "\\'").replace('"', '\\"')
+        value = html.escape(values[index], quote=False).replace("'", "\\'").replace('"', '\\"').replace("\n", "\\n")
         lines.append(f'    <string name="fc_{key}">{value}</string>')
     (folder / "strings.xml").write_text("\n".join(lines + ["</resources>", ""]), encoding="utf-8")
 lookup = "\n".join('  case ' + json.dumps(values[0], ensure_ascii=True) + ':return c.getString(R.string.fc_' + key + ');' for key, values in data.items())

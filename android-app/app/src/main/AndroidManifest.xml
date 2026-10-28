@@ -11,7 +11,8 @@
     <queries><intent><action android:name="android.speech.RecognitionService" /></intent></queries>
     <application android:localeConfig="@xml/locales_config" android:theme="@android:style/Theme.Material.NoActionBar" android:label="Face Chaos" android:icon="@drawable/app_icon" android:allowBackup="false" android:fullBackupContent="false" android:dataExtractionRules="@xml/data_extraction_rules" android:supportsRtl="true">
         <provider android:name=".ClipProvider" android:authorities="${applicationId}.clips" android:exported="false" android:grantUriPermissions="true" />
-        <activity android:name=".MainActivity" android:resizeableActivity="true" android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|keyboard|keyboardHidden" android:exported="true">
+        <activity android:name=".MainActivity" android:resizeableActivity="true" android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|keyboard|keyboardHidden" android:exported="false" />
+        <activity android:name=".WelcomeActivity" android:resizeableActivity="true" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

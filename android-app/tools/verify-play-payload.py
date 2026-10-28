@@ -20,6 +20,9 @@ assert manifest.attrib[ns + "versionName"] == expected_name
 assert manifest.find("application").attrib.get(ns + "debuggable", "false") == "false"
 assert manifest.find("uses-sdk").attrib[ns + "targetSdkVersion"] == "36"
 activity = manifest.find("application/activity")
+launcher = next(a for a in manifest.findall("application/activity") if a.find("intent-filter") is not None)
+assert launcher.attrib[ns + "name"] == "com.facechaos.mobile.WelcomeActivity"
+assert activity.attrib.get(ns + "exported") == "false", "Camera screen must be entered through welcome"
 assert activity.attrib.get(ns + "resizeableActivity") == "true"
 assert ns + "screenOrientation" not in activity.attrib
 assert ns + "maxAspectRatio" not in activity.attrib

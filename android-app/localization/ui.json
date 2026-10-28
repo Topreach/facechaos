@@ -144,5 +144,15 @@
  "yes":["Yes","نعم","Oui","Sí","Sim"],
  "no":["No","لا","Non","No","Não"],
  "wide_eyes":["Open both eyes wide","افتح كلتا العينين على اتساعهما","Ouvrez grand les deux yeux","Abre bien ambos ojos","Abra bem os dois olhos"],
- "face_squeeze":["Scrunch your face briefly","اقبض وجهك بلطف للحظة","Plissez brièvement le visage","Contrae la cara brevemente","Contraia o rosto brevemente"]
+ "face_squeeze":["Scrunch your face briefly","اقبض وجهك بلطف للحظة","Plissez brièvement le visage","Contrae la cara brevemente","Contraia o rosto brevemente"],
+ "home_title":["Make a face.\nMake your move.","غيّر تعبيرك.\nابدأ التحدي.","Une expression.\nÀ vous de jouer.","Haz una mueca.\nHaz tu jugada.","Faça uma expressão.\nFaça sua jogada."],
+ "home_intro":["Welcome to Face Chaos: playful mini-games over your selfie, controlled by expressions, head movement and sound.","مرحبًا بك في Face Chaos: ألعاب مرحة فوق صورة الكاميرا تتحكم بها بتعابير وجهك وحركة رأسك وصوتك.","Bienvenue dans Face Chaos : des mini-jeux sur votre selfie, contrôlés par vos expressions, votre tête et vos sons.","Bienvenido a Face Chaos: minijuegos sobre tu selfie, controlados con expresiones, movimientos de cabeza y sonidos.","Bem-vindo ao Face Chaos: minijogos sobre sua selfie, controlados por expressões, movimentos da cabeça e sons."],
+ "home_choose":["Choose your challenge","اختر تحديك","Choisissez votre défi","Elige tu desafío","Escolha seu desafio"],
+ "home_choose_note":["Pick a game and read its quick instructions.","اختر لعبة واقرأ تعليماتها المختصرة.","Choisissez un jeu et lisez ses instructions.","Elige un juego y lee sus instrucciones.","Escolha um jogo e leia as instruções rápidas."],
+ "home_follow":["Follow the cue","اتبع الإشارة","Suivez la consigne","Sigue la indicación","Siga a indicação"],
+ "home_follow_note":["Make the requested face, move or sound. Relax between turns.","نفّذ التعبير أو الحركة أو الصوت المطلوب، ثم استرخِ بين المحاولات.","Faites l’expression, le mouvement ou le son demandé. Détendez-vous entre les actions.","Haz la expresión, el movimiento o el sonido indicado. Relájate entre acciones.","Faça a expressão, o movimento ou o som indicado. Relaxe entre as ações."],
+ "home_record":["Keep your best moments","احتفظ بأجمل لحظاتك","Gardez vos meilleurs moments","Guarda tus mejores momentos","Guarde seus melhores momentos"],
+ "home_record_note":["Optionally record a silent clip, then choose whether to share it.","يمكنك تسجيل مقطع صامت، ثم اختيار مشاركته.","Enregistrez une vidéo muette si vous le souhaitez, puis choisissez de la partager.","Graba un vídeo sin sonido si quieres y decide si lo compartes.","Se quiser, grave um vídeo sem som e decida se deseja compartilhar."],
+ "home_start":["Let’s play","لنلعب","C’est parti","¡A jugar!","Vamos jogar"],
+ "home_privacy_note":["The camera opens on the next screen. Nothing is posted automatically.","تفتح الكاميرا في الشاشة التالية. لا يُنشر أي شيء تلقائيًا.","La caméra s’ouvre à l’écran suivant. Rien n’est publié automatiquement.","La cámara se abre en la siguiente pantalla. No se publica nada automáticamente.","A câmera abre na próxima tela. Nada é publicado automaticamente."]
 }

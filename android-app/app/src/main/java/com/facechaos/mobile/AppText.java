@@ -150,6 +150,16 @@ final class AppText {
   case "No":return c.getString(R.string.fc_no);
   case "Open both eyes wide":return c.getString(R.string.fc_wide_eyes);
   case "Scrunch your face briefly":return c.getString(R.string.fc_face_squeeze);
+  case "Make a face.\nMake your move.":return c.getString(R.string.fc_home_title);
+  case "Welcome to Face Chaos: playful mini-games over your selfie, controlled by expressions, head movement and sound.":return c.getString(R.string.fc_home_intro);
+  case "Choose your challenge":return c.getString(R.string.fc_home_choose);
+  case "Pick a game and read its quick instructions.":return c.getString(R.string.fc_home_choose_note);
+  case "Follow the cue":return c.getString(R.string.fc_home_follow);
+  case "Make the requested face, move or sound. Relax between turns.":return c.getString(R.string.fc_home_follow_note);
+  case "Keep your best moments":return c.getString(R.string.fc_home_record);
+  case "Optionally record a silent clip, then choose whether to share it.":return c.getString(R.string.fc_home_record_note);
+  case "Let\u2019s play":return c.getString(R.string.fc_home_start);
+  case "The camera opens on the next screen. Nothing is posted automatically.":return c.getString(R.string.fc_home_privacy_note);
  default:return source;}}
  static String[] items(Context c,String[] source){String[] result=source.clone();for(int i=0;i<result.length;i++)result[i]=t(c,result[i]);return result;}
  static String brief(Context c,int mode){int[] ids={R.string.fc_brief0,R.string.fc_brief1,R.string.fc_brief2,R.string.fc_brief3,R.string.fc_brief4,R.string.fc_brief5,R.string.fc_brief6,R.string.fc_brief7,R.string.fc_brief8,R.string.fc_brief9,R.string.fc_brief10,R.string.fc_brief11,R.string.fc_brief12,R.string.fc_brief13,R.string.fc_brief14};return c.getString(ids[mode]);}

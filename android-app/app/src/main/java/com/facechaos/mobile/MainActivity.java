@@ -858,11 +858,11 @@ public final class MainActivity extends Activity {
         if(!file.isFile()){Toast.makeText(this,"Recording not found",Toast.LENGTH_LONG).show();return;}
         new AlertDialog.Builder(this).setTitle(AppText.t(MainActivity.this,"Share your game video")).setItems(AppText.items(MainActivity.this,new String[]{"TikTok","Instagram","YouTube","WhatsApp","Other apps"}),(d,choice)->{
             String[] packages={"com.zhiliaoapp.musically","com.instagram.android","com.google.android.youtube","com.whatsapp"};
-            Intent send=ClipSharing.video(file,choice<4?packages[choice]:null);
+            Intent send=ClipSharing.video(this,file,choice<4?packages[choice]:null);
             try{startActivity(choice<4?send:Intent.createChooser(send,"Share your game video"));}
             catch(android.content.ActivityNotFoundException error){
-                if(choice==0){try{startActivity(ClipSharing.video(file,"com.ss.android.ugc.trill"));return;}catch(android.content.ActivityNotFoundException ignored){}}
-                try{startActivity(Intent.createChooser(ClipSharing.video(file,null),"Choose an installed video app"));}catch(android.content.ActivityNotFoundException unavailable){Toast.makeText(this,"No video-sharing app available. Save to Gallery instead.",Toast.LENGTH_LONG).show();}
+                if(choice==0){try{startActivity(ClipSharing.video(this,file,"com.ss.android.ugc.trill"));return;}catch(android.content.ActivityNotFoundException ignored){}}
+                try{startActivity(Intent.createChooser(ClipSharing.video(this,file,null),"Choose an installed video app"));}catch(android.content.ActivityNotFoundException unavailable){Toast.makeText(this,"No video-sharing app available. Save to Gallery instead.",Toast.LENGTH_LONG).show();}
             }
         }).setNegativeButton(AppText.t(MainActivity.this,"Cancel"),null).show();
     }
