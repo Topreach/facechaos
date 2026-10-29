@@ -152,12 +152,12 @@ final class AppText {
   case "Scrunch your face briefly":return c.getString(R.string.fc_face_squeeze);
   case "Make a face.\nMake your move.":return c.getString(R.string.fc_home_title);
   case "Welcome to Face Chaos: playful mini-games over your selfie, controlled by expressions, head movement and sound.":return c.getString(R.string.fc_home_intro);
-  case "Choose your challenge":return c.getString(R.string.fc_home_choose);
-  case "Pick a game and read its quick instructions.":return c.getString(R.string.fc_home_choose_note);
+  case "Choose from 15 games":return c.getString(R.string.fc_home_choose);
+  case "Tap Games on the camera screen, choose a game and read its instructions.":return c.getString(R.string.fc_home_choose_note);
   case "Follow the cue":return c.getString(R.string.fc_home_follow);
   case "Make the requested face, move or sound. Relax between turns.":return c.getString(R.string.fc_home_follow_note);
-  case "Keep your best moments":return c.getString(R.string.fc_home_record);
-  case "Optionally record a silent clip, then choose whether to share it.":return c.getString(R.string.fc_home_record_note);
+  case "Record & share the fun":return c.getString(R.string.fc_home_record);
+  case "In the game\u2019s instructions, turn on \u201c%1$s\u201d to record yourself playing. Share your clip on social media.":return c.getString(R.string.fc_home_record_note);
   case "Let\u2019s play":return c.getString(R.string.fc_home_start);
   case "The camera opens on the next screen. Nothing is posted automatically.":return c.getString(R.string.fc_home_privacy_note);
  default:return source;}}

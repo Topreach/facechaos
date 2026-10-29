@@ -148,12 +148,12 @@
     <string name="fc_face_squeeze">Contrae la cara brevemente</string>
     <string name="fc_home_title">Haz una mueca.\nHaz tu jugada.</string>
     <string name="fc_home_intro">Bienvenido a Face Chaos: minijuegos sobre tu selfie, controlados con expresiones, movimientos de cabeza y sonidos.</string>
-    <string name="fc_home_choose">Elige tu desafío</string>
-    <string name="fc_home_choose_note">Elige un juego y lee sus instrucciones.</string>
+    <string name="fc_home_choose">Elige entre 15 juegos</string>
+    <string name="fc_home_choose_note">Toca Juegos en la pantalla de la cámara, elige un juego y lee sus instrucciones.</string>
     <string name="fc_home_follow">Sigue la indicación</string>
     <string name="fc_home_follow_note">Haz la expresión, el movimiento o el sonido indicado. Relájate entre acciones.</string>
-    <string name="fc_home_record">Guarda tus mejores momentos</string>
-    <string name="fc_home_record_note">Graba un vídeo sin sonido si quieres y decide si lo compartes.</string>
+    <string name="fc_home_record">Graba y comparte la diversión</string>
+    <string name="fc_home_record_note">En las instrucciones del juego, activa «%1$s» para grabarte jugando. Comparte tu vídeo en las redes sociales.</string>
     <string name="fc_home_start">¡A jugar!</string>
     <string name="fc_home_privacy_note">La cámara se abre en la siguiente pantalla. No se publica nada automáticamente.</string>
 </resources>

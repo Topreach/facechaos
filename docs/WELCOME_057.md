@@ -26,3 +26,13 @@ The test copy is labelled **Face Chaos verification** and has package `com.facec
 Signed Play bundle: `dist/FaceChaos-0.21.0-57-welcome-play.aab`.
 
 SHA-256: `45309989d4b2415dd81bb9a82cf0a97c0a42325168d6a86b53d44f91edb31e0a`.
+
+## Build 58 instruction refinement
+
+Version `0.21.0-setup.4` clarifies that players tap **Games** on the camera screen to select from **15 games**, then read their chosen game's instructions. It explains turning on **Record my round (silent)** before playing and sharing the finished clip on social media. The recording option's actual localized label is inserted into the explanation, keeping the instructions aligned with the switch in all five languages.
+
+This updates guidance only; recording remains optional, silent and explicitly shared by the player. There is no automatic social posting. Build 57 remains unchanged; build 58 is a separate upload.
+
+Build 58 checks: five-language formatting validation, actual Samsung accessibility text confirms the 15-game count and the complete recording/social-sharing instructions with the switch label substituted; release lint 0 errors, 34 warnings; bundletool validation, final payload/native-layout checks and all 133 payload signatures pass. The separate phone verification copy is updated.
+
+Signed bundle: `dist/FaceChaos-0.21.0-58-welcome-play.aab`. SHA-256: `855ace0e701bb26977a1b4eb43cf4123ec2c73697be506b3f245f0cb190517ad`.

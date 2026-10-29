@@ -62,7 +62,8 @@ final class WelcomePanel extends FrameLayout {
  private void step(LinearLayout parent,String number,int title,int note,int color){
   LinearLayout row=new LinearLayout(getContext());row.setGravity(Gravity.CENTER_VERTICAL);row.setPadding(0,dp(10),0,dp(10));
   TextView badge=text(number,16,0xFF173E42,true);badge.setGravity(Gravity.CENTER);badge.setBackground(shape(color,12));row.addView(badge,new LinearLayout.LayoutParams(dp(34),dp(34)));
-  LinearLayout copy=new LinearLayout(getContext());copy.setOrientation(LinearLayout.VERTICAL);copy.setPaddingRelative(dp(12),0,0,0);copy.addView(text(getResources().getString(title),14,0xFF173E42,true));copy.addView(text(getResources().getString(note),12,0xFF49695F,false));row.addView(copy,new LinearLayout.LayoutParams(0,-2,1));parent.addView(row);
+  String explanation=note==R.string.fc_home_record_note?getResources().getString(note,getResources().getString(R.string.fc_record_round)):getResources().getString(note);
+  LinearLayout copy=new LinearLayout(getContext());copy.setOrientation(LinearLayout.VERTICAL);copy.setPaddingRelative(dp(12),0,0,0);copy.addView(text(getResources().getString(title),14,0xFF173E42,true));copy.addView(text(explanation,12,0xFF49695F,false));row.addView(copy,new LinearLayout.LayoutParams(0,-2,1));parent.addView(row);
  }
  private TextView text(String value,int size,int color,boolean bold){TextView label=new TextView(getContext());label.setText(value);label.setTextSize(size);label.setTextColor(color);if(bold)label.setTypeface(null,Typeface.BOLD);return label;}
  private Button button(String label,int color){Button button=new Button(getContext());button.setText(label);button.setAllCaps(false);button.setTextColor(0xFF173E42);button.setTypeface(null,Typeface.BOLD);button.setBackground(shape(color,20));button.setBackgroundTintList(null);button.setPadding(dp(16),dp(8),dp(16),dp(8));return button;}

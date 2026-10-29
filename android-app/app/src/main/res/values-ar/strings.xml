@@ -148,12 +148,12 @@
     <string name="fc_face_squeeze">اقبض وجهك بلطف للحظة</string>
     <string name="fc_home_title">غيّر تعبيرك.\nابدأ التحدي.</string>
     <string name="fc_home_intro">مرحبًا بك في Face Chaos: ألعاب مرحة فوق صورة الكاميرا تتحكم بها بتعابير وجهك وحركة رأسك وصوتك.</string>
-    <string name="fc_home_choose">اختر تحديك</string>
-    <string name="fc_home_choose_note">اختر لعبة واقرأ تعليماتها المختصرة.</string>
+    <string name="fc_home_choose">اختر من بين 15 لعبة</string>
+    <string name="fc_home_choose_note">اضغط على الألعاب في شاشة الكاميرا، ثم اختر لعبة واقرأ تعليماتها.</string>
     <string name="fc_home_follow">اتبع الإشارة</string>
     <string name="fc_home_follow_note">نفّذ التعبير أو الحركة أو الصوت المطلوب، ثم استرخِ بين المحاولات.</string>
-    <string name="fc_home_record">احتفظ بأجمل لحظاتك</string>
-    <string name="fc_home_record_note">يمكنك تسجيل مقطع صامت، ثم اختيار مشاركته.</string>
+    <string name="fc_home_record">سجّل المرح وشاركه</string>
+    <string name="fc_home_record_note">فعّل «%1$s» في تعليمات اللعبة لتسجيل نفسك أثناء اللعب. شارك مقطعك على وسائل التواصل الاجتماعي.</string>
     <string name="fc_home_start">لنلعب</string>
     <string name="fc_home_privacy_note">تفتح الكاميرا في الشاشة التالية. لا يُنشر أي شيء تلقائيًا.</string>
 </resources>

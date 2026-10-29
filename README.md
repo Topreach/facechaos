@@ -17,7 +17,7 @@ Android camera-overlay mini-games controlled with facial expressions, head movem
 
 ## Build and test
 
-The quality-fix branch builds version 57 (`0.21.0-setup.3`), adding a [welcome homepage before camera access](docs/WELCOME_057.md). It retains R8 release optimization, bundled translations, updated Fragment and adaptive orientation/resizing support. Billing setup remains inactive; see [quality fixes](docs/PLAY_QUALITY_055.md) and [optimization and language notes](docs/PLAY_OPTIMIZATION_056.md).
+The quality-fix branch builds version 58 (`0.21.0-setup.4`), with a [welcome homepage before camera access](docs/WELCOME_057.md) explaining how to choose among 15 games and enable recording in a game's instructions. It retains R8 release optimization, bundled translations, updated Fragment and adaptive orientation/resizing support. Billing setup remains inactive; see [quality fixes](docs/PLAY_QUALITY_055.md) and [optimization and language notes](docs/PLAY_OPTIMIZATION_056.md).
 
 Use Android SDK 36 and Java 17 or newer. From `android-app`:
 
