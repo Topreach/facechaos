@@ -12,6 +12,7 @@ public final class TeethImageCheck {
   for(float slope:new float[]{-.5f,-.25f,0,.25f,.5f}){
    require(evidence(slope,false,0xFFF2EEE0)>.6f,"A visible upper row must count at head tilt: "+slope);
    require(evidence(slope,true,0xFFF2EEE0)>.8f,"Visible ivory upper/lower rows must survive head tilt: "+slope);
+   require(evidence(slope,true,0xFFF5DBCB)>.8f,"Warm-tinted ivory teeth must not be rejected as pink lips: "+slope);
    require(evidence(slope,true,0xFF858278)>.8f,"Dim ivory teeth must not be rejected by a fixed 145 brightness cutoff: "+slope);
    require(evidence(slope,false,0xFF858278)>.6f,"Dim upper-row teeth must count: "+slope);
    require(evidence(slope,true,0xFFE9A4A2)==0,"Pink lips/tongue must not become teeth: "+slope);

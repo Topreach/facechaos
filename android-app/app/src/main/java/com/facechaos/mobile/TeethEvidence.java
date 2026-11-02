@@ -53,6 +53,7 @@ final class TeethEvidence {
   return Math.max(0,Math.min(1,Math.min((fraction-.015f)/.08f,coverage/.35f)));
  }
  private static int maxColor(int rgb){return Math.max(rgb>>16&255,Math.max(rgb>>8&255,rgb&255));}
- private static boolean pale(int rgb,int floor){int r=rgb>>16&255,g=rgb>>8&255,b=rgb&255,max=Math.max(r,Math.max(g,b)),min=Math.min(r,Math.min(g,b));return max>=floor&&(max-min)*255<=max*105&&r-g<=.65f*Math.max(0,g-b)+12;}
+ // Permit warm ivory (red and yellow rise together), while rejecting red-dominant lip/tongue pixels.
+ private static boolean pale(int rgb,int floor){int r=rgb>>16&255,g=rgb>>8&255,b=rgb&255,max=Math.max(r,Math.max(g,b)),min=Math.min(r,Math.min(g,b));return max>=floor&&(max-min)*255<=max*105&&r-g<=Math.max(0,g-b)+18;}
  private static int percentile(int[] histogram,int count,float fraction){int target=Math.max(1,(int)Math.ceil(count*fraction)),sum=0;for(int i=0;i<histogram.length;i++){sum+=histogram[i];if(sum>=target)return i;}return 255;}
 }
