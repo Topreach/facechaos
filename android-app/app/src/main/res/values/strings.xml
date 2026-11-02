@@ -158,4 +158,14 @@
     <string name="fc_home_privacy_note">The camera opens on the next screen. Nothing is posted automatically.</string>
     <string name="fc_clip_duration">Duration %1$s</string>
     <string name="fc_record_session_note">One recording covers this game’s retries and stages. Tap Stop to finish, then Clip to review or save. Maximum 2 minutes.</string>
+    <string name="fc_look_button">✨ Look</string>
+    <string name="fc_look_title">Camera look</string>
+    <string name="fc_look_note">Gentle brightening, warmth and smoothing for your selfie and recordings. Your face shape stays unchanged.</string>
+    <string name="fc_look_off">Off</string>
+    <string name="fc_look_natural">Natural</string>
+    <string name="fc_look_smooth">Smooth</string>
+    <string name="fc_look_intensity">Intensity</string>
+    <string name="fc_look_warmth">Warmth</string>
+    <string name="fc_look_compare">Compare original preview</string>
+    <string name="fc_look_smoothing_unavailable">Smoothing is unavailable on this device. Brightening and warmth still work.</string>
 </resources>

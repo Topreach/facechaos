@@ -80,13 +80,17 @@ public final class MainActivity extends Activity {
     private int gameGeneration, permissionGeneration;
     private AlertDialog switchConfirmation;
     private TextureView preview;
+    private FrameLayout cameraLayer;
+    private CameraLookPreview lookPreview;
+    private CameraLook cameraLook,recordLook=CameraLook.ORIGINAL;
+    private boolean compareOriginal;
     private CaptureButton captureButton;
     private TextView captureLabel, recordState;
     private Switch recordSwitch;
-    private Button gamesButton;
+    private Button gamesButton,lookButton;
     private final Handler ui = new Handler(Looper.getMainLooper());
     private VideoEncoder encoder;
-    private Bitmap videoFrame;
+    private Bitmap videoFrame,overlayFrame;
     private boolean preparingVideo, finishingVideo, handledResult;
     private File lastClip, exportClip;
     private Runnable afterVideo;
@@ -111,13 +115,14 @@ public final class MainActivity extends Activity {
         if(encoder.available()&&preview.isAvailable()){
             try{
                 if(preview.getBitmap(videoFrame)==null)throw new IllegalStateException("No camera frame");
+                overlayFrame.eraseColor(Color.TRANSPARENT);
                 if(overlay.getVisibility()==View.VISIBLE){
-                    Canvas canvas=new Canvas(videoFrame);canvas.save();
+                    Canvas canvas=new Canvas(overlayFrame);canvas.save();
                     canvas.scale(videoFrame.getWidth()/(float)preview.getWidth(),videoFrame.getHeight()/(float)preview.getHeight());
                     canvas.translate(overlay.getLeft()-preview.getLeft(),overlay.getTop()-preview.getTop());
                     overlay.draw(canvas);canvas.restore();
                 }
-                encoder.submit(videoFrame,System.nanoTime());
+                encoder.submit(videoFrame,overlayFrame,recordLook,System.nanoTime());
             }catch(Exception error){stopVideo(null);Toast.makeText(MainActivity.this,"Camera recording interrupted",Toast.LENGTH_LONG).show();}
         }
         ui.postAtTime(this,Math.max(SystemClock.uptimeMillis()+1,frameStart+42));
@@ -130,7 +135,8 @@ public final class MainActivity extends Activity {
         FrameLayout root = new FrameLayout(this);
         root.setBackgroundColor(Color.rgb(23, 62, 66));
         preview = new TextureView(this);
-        root.addView(preview, new FrameLayout.LayoutParams(-1, -1));
+        cameraLayer=new FrameLayout(this);cameraLayer.addView(preview,new FrameLayout.LayoutParams(-1,-1));root.addView(cameraLayer,new FrameLayout.LayoutParams(-1,-1));
+        android.content.SharedPreferences appearance=getSharedPreferences("appearance",0);cameraLook=new CameraLook(appearance.getInt("mode",CameraLook.NATURAL),appearance.getFloat("intensity",.35f),appearance.getFloat("warmth",0));lookPreview=new CameraLookPreview(cameraLayer);applyCameraLook();cameraLayer.addOnLayoutChangeListener((v,l,t,r,b,ol,ot,or,ob)->{if(r-l!=or-ol||b-t!=ob-ot)applyCameraLook();});
         overlay = new GameOverlay(this);
         overlay.setVisibility(View.GONE);
         root.addView(overlay, new FrameLayout.LayoutParams(-1, -1));
@@ -211,9 +217,11 @@ public final class MainActivity extends Activity {
                 android.graphics.Insets safe = insets.getInsets(android.view.WindowInsets.Type.systemBars() | android.view.WindowInsets.Type.displayCutout());
                 controls.setPadding(20 + safe.left, 12, 20 + safe.right, 12 + safe.bottom);
                 overlay.setSafeTop(safe.top);
+                if(lookButton!=null){FrameLayout.LayoutParams look=(FrameLayout.LayoutParams)lookButton.getLayoutParams();look.topMargin=safe.top+dp(78);lookButton.setLayoutParams(look);}
             } else {
                 controls.setPadding(20 + insets.getSystemWindowInsetLeft(), 12, 20 + insets.getSystemWindowInsetRight(), 12 + insets.getSystemWindowInsetBottom());
                 overlay.setSafeTop(insets.getSystemWindowInsetTop());
+                if(lookButton!=null){FrameLayout.LayoutParams look=(FrameLayout.LayoutParams)lookButton.getLayoutParams();look.topMargin=insets.getSystemWindowInsetTop()+dp(78);lookButton.setLayoutParams(look);}
             }
             return insets;
         });
@@ -221,11 +229,17 @@ public final class MainActivity extends Activity {
         options.setContentDescription("Game options, recordings and rating");options.setOnClickListener(v -> showAppOptions());
         FrameLayout.LayoutParams optionsLayout=new FrameLayout.LayoutParams(dp(56),dp(48),Gravity.TOP|Gravity.RIGHT);optionsLayout.topMargin=dp(32);optionsLayout.rightMargin=dp(6);
         root.addView(options,optionsLayout);
+        lookButton=new Button(this);lookButton.setText(R.string.fc_look_button);lookButton.setTextSize(13);lookButton.setAllCaps(false);lookButton.setTextColor(0xFF173E42);lookButton.setTypeface(null,android.graphics.Typeface.BOLD);lookButton.setBackground(cardBackground(0xE6F4F4E8,0x80FFFFFF));lookButton.setBackgroundTintList(null);lookButton.setContentDescription(getString(R.string.fc_look_title));lookButton.setOnClickListener(v->showCameraLook());FrameLayout.LayoutParams lookLayout=new FrameLayout.LayoutParams(dp(108),dp(44),Gravity.TOP|Gravity.START);lookLayout.topMargin=dp(102);lookLayout.setMarginStart(dp(12));root.addView(lookButton,lookLayout);
         setContentView(root);gameAudio=new GameAudio(this);
         String clipName=getPreferences(0).getString("last_clip","");
         if(clipName.matches("facechaos_[0-9]+\\.mp4")){File folder=getExternalFilesDir(Environment.DIRECTORY_MOVIES);if(folder!=null){File saved=new File(folder,clipName);if(saved.isFile())lastClip=saved;}}
         camera = new SelfieCamera(this, preview, message -> runOnUiThread(() -> showCameraStatus(message)));
         overlay.select(0);overlay.setVisibility(View.VISIBLE);setRoundPaused(true);
+    }
+    private void applyCameraLook(){recordLook=lookPreview.apply(compareOriginal?CameraLook.ORIGINAL:cameraLook);}
+    private void showCameraLook(){
+        final boolean wasPaused=paused;final MiniGame owner=overlay.game;setRoundPaused(true);
+        CameraLookDialog.show(this,cameraLook.supported(lookPreview.supportsSmoothing()),lookPreview.supportsSmoothing(),value->{cameraLook=value;getSharedPreferences("appearance",0).edit().putInt("mode",value.mode).putFloat("intensity",value.intensity).putFloat("warmth",value.warmth).apply();applyCameraLook();},value->{compareOriginal=value;applyCameraLook();},()->{compareOriginal=false;applyCameraLook();if(resumed&&overlay.game==owner)setRoundPaused(wasPaused);});
     }
     private void closeGame() {
         if(activeRound()){confirmGameSwitch();return;}
@@ -768,6 +782,7 @@ public final class MainActivity extends Activity {
     private void updateCaptureControls(){
         if(captureButton==null||captureLabel==null||recordSwitch==null)return;
         boolean game=gameVisible(),active=encoder!=null,busy=preparingVideo||finishingVideo;
+        if(lookButton!=null){lookButton.setVisibility(awaitingStart||paused?View.VISIBLE:View.GONE);lookButton.setEnabled(!busy);}
         CaptureButton.Mode mode;String label;
         if(busy){mode=CaptureButton.Mode.BUSY;label=finishingVideo?"Finishing":"Preparing";}
         else if(awaitingStart){mode=CaptureButton.Mode.PLAY;label="Start";}
@@ -810,6 +825,7 @@ public final class MainActivity extends Activity {
                 preparingVideo=false;
                 if(!resumed||finishingVideo){stopVideo(null);return;}
                 videoFrame=Bitmap.createBitmap(recordedWidth,recordedHeight,Bitmap.Config.ARGB_8888);
+                overlayFrame=Bitmap.createBitmap(recordedWidth,recordedHeight,Bitmap.Config.ARGB_8888);
                 recordingStart=SystemClock.elapsedRealtime();onReady.run();
                 if(switchConfirmation!=null&&switchConfirmation.isShowing())setRoundPaused(true);
                 ui.removeCallbacks(captureFrame);ui.post(captureFrame);updateCaptureControls();
@@ -841,6 +857,7 @@ public final class MainActivity extends Activity {
     private void finishVideoState(){
         encoder=null;preparingVideo=false;finishingVideo=false;ui.removeCallbacks(captureFrame);
         if(videoFrame!=null){videoFrame.recycle();videoFrame=null;}
+        if(overlayFrame!=null){overlayFrame.recycle();overlayFrame=null;}
         Runnable next=afterVideo;afterVideo=null;updateCaptureControls();if(next!=null&&resumed)next.run();
     }
     private void showLastClip(){

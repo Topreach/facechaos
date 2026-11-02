@@ -158,4 +158,14 @@
     <string name="fc_home_privacy_note">La cámara se abre en la siguiente pantalla. No se publica nada automáticamente.</string>
     <string name="fc_clip_duration">Duración %1$s</string>
     <string name="fc_record_session_note">Una grabación incluye los reintentos y etapas del juego. Toca Detener para terminar y Vídeo para revisar o guardar. Máximo 2 minutos.</string>
+    <string name="fc_look_button">✨ Estilo</string>
+    <string name="fc_look_title">Estilo de cámara</string>
+    <string name="fc_look_note">Brillo suave, calidez y suavizado para tu selfie y tus vídeos, sin cambiar la forma de tu rostro.</string>
+    <string name="fc_look_off">Sin efecto</string>
+    <string name="fc_look_natural">Natural</string>
+    <string name="fc_look_smooth">Suave</string>
+    <string name="fc_look_intensity">Intensidad</string>
+    <string name="fc_look_warmth">Calidez</string>
+    <string name="fc_look_compare">Comparar con la vista original</string>
+    <string name="fc_look_smoothing_unavailable">El suavizado no está disponible en este dispositivo. El brillo y la calidez sí funcionan.</string>
 </resources>

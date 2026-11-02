@@ -158,4 +158,14 @@
     <string name="fc_home_privacy_note">تفتح الكاميرا في الشاشة التالية. لا يُنشر أي شيء تلقائيًا.</string>
     <string name="fc_clip_duration">المدة %1$s</string>
     <string name="fc_record_session_note">يشمل التسجيل الواحد إعادة المحاولات ومراحل هذه اللعبة. اضغط إيقاف لإنهائه، ثم المقطع للمراجعة أو الحفظ. الحد الأقصى دقيقتان.</string>
+    <string name="fc_look_button">✨ المظهر</string>
+    <string name="fc_look_title">مظهر الكاميرا</string>
+    <string name="fc_look_note">إضاءة لطيفة ودفء وتنعيم لصورة الكاميرا وتسجيلاتك، دون تغيير شكل وجهك.</string>
+    <string name="fc_look_off">إيقاف</string>
+    <string name="fc_look_natural">طبيعي</string>
+    <string name="fc_look_smooth">ناعم</string>
+    <string name="fc_look_intensity">الشدة</string>
+    <string name="fc_look_warmth">الدفء</string>
+    <string name="fc_look_compare">مقارنة بصورة الكاميرا الأصلية</string>
+    <string name="fc_look_smoothing_unavailable">التنعيم غير متاح على هذا الجهاز. يمكنك استخدام الإضاءة والدفء.</string>
 </resources>

@@ -25,9 +25,9 @@ final class VideoEncoder {
     private EGLDisplay display=EGL14.EGL_NO_DISPLAY;
     private EGLContext context=EGL14.EGL_NO_CONTEXT;
     private EGLSurface surface=EGL14.EGL_NO_SURFACE;
-    private int program,texture,frames;
+    private int program,texture,overlayTexture,frames;
     private FloatBuffer vertices,coords;
-    private boolean allocated,terminal;
+    private boolean allocated,overlayAllocated,terminal;
 
     VideoEncoder(File file,int width,int height,Listener listener){this(file,width,height,RecordingQuality.bitrate(width,height),listener);}
     VideoEncoder(File file,int width,int height,int bitrate,Listener listener){this.file=file;this.width=width;this.height=height;this.bitrate=bitrate;this.listener=listener;}
@@ -36,8 +36,11 @@ final class VideoEncoder {
     });}
     boolean available(){return started&&!stopping&&!paused&&!busy.get();}
     boolean submit(Bitmap bitmap,long time){
+        return submit(bitmap,null,CameraLook.ORIGINAL,time);
+    }
+    boolean submit(Bitmap bitmap,Bitmap overlay,CameraLook look,long time){
         if(!started||stopping||paused||!busy.compareAndSet(false,true))return false;
-        worker.post(()->{try{if(!stopping&&!paused){draw(bitmap,time);frames++;}}catch(Exception error){fail("Video recording was interrupted. Try a shorter clip.");}finally{busy.set(false);}});return true;
+        worker.post(()->{try{if(!stopping&&!paused){draw(bitmap,overlay,look,time);frames++;}}catch(Exception error){fail("Video recording was interrupted. Try a shorter clip.");}finally{busy.set(false);}});return true;
     }
     void setPaused(boolean value){
         // MediaRecorder starts in the recording state. Repeated resume/pause calls
@@ -80,27 +83,32 @@ final class VideoEncoder {
         surface=EGL14.eglCreateWindowSurface(display,configs[0],input,new int[]{EGL14.EGL_NONE},0);
         if(!EGL14.eglMakeCurrent(display,surface,surface,context))throw new IllegalStateException("EGL surface");
         String vertex="attribute vec4 aPosition;attribute vec2 aTex;varying vec2 vTex;void main(){gl_Position=aPosition;vTex=aTex;}";
-        String fragment="precision mediump float;varying vec2 vTex;uniform sampler2D uTexture;void main(){gl_FragColor=texture2D(uTexture,vTex);}";
+        String fragment=CameraLookShader.glsl();
         int vs=shader(GLES20.GL_VERTEX_SHADER,vertex),fs=shader(GLES20.GL_FRAGMENT_SHADER,fragment);
         program=GLES20.glCreateProgram();GLES20.glAttachShader(program,vs);GLES20.glAttachShader(program,fs);GLES20.glLinkProgram(program);
         int[] status=new int[1];GLES20.glGetProgramiv(program,GLES20.GL_LINK_STATUS,status,0);if(status[0]==0)throw new IllegalStateException("Shader link");
         GLES20.glDeleteShader(vs);GLES20.glDeleteShader(fs);
-        int[] ids=new int[1];GLES20.glGenTextures(1,ids,0);texture=ids[0];GLES20.glBindTexture(GLES20.GL_TEXTURE_2D,texture);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D,GLES20.GL_TEXTURE_MIN_FILTER,GLES20.GL_LINEAR);GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D,GLES20.GL_TEXTURE_MAG_FILTER,GLES20.GL_LINEAR);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D,GLES20.GL_TEXTURE_WRAP_S,GLES20.GL_CLAMP_TO_EDGE);GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D,GLES20.GL_TEXTURE_WRAP_T,GLES20.GL_CLAMP_TO_EDGE);
+        int[] ids=new int[2];GLES20.glGenTextures(2,ids,0);texture=ids[0];overlayTexture=ids[1];
+        for(int id:ids){GLES20.glBindTexture(GLES20.GL_TEXTURE_2D,id);GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D,GLES20.GL_TEXTURE_MIN_FILTER,GLES20.GL_LINEAR);GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D,GLES20.GL_TEXTURE_MAG_FILTER,GLES20.GL_LINEAR);GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D,GLES20.GL_TEXTURE_WRAP_S,GLES20.GL_CLAMP_TO_EDGE);GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D,GLES20.GL_TEXTURE_WRAP_T,GLES20.GL_CLAMP_TO_EDGE);}
         vertices=buffer(new float[]{-1,-1,1,-1,-1,1,1,1});coords=buffer(new float[]{0,1,1,1,0,0,1,0});
     }
     private int shader(int type,String source){int shader=GLES20.glCreateShader(type);GLES20.glShaderSource(shader,source);GLES20.glCompileShader(shader);int[] ok=new int[1];GLES20.glGetShaderiv(shader,GLES20.GL_COMPILE_STATUS,ok,0);if(ok[0]==0)throw new IllegalStateException("Shader compile");return shader;}
     private FloatBuffer buffer(float[] data){FloatBuffer b=ByteBuffer.allocateDirect(data.length*4).order(ByteOrder.nativeOrder()).asFloatBuffer();b.put(data).position(0);return b;}
-    private void draw(Bitmap bitmap,long timestamp){
-        GLES20.glViewport(0,0,width,height);GLES20.glUseProgram(program);GLES20.glActiveTexture(GLES20.GL_TEXTURE0);GLES20.glBindTexture(GLES20.GL_TEXTURE_2D,texture);
-        if(!allocated){GLUtils.texImage2D(GLES20.GL_TEXTURE_2D,0,bitmap,0);allocated=true;}else GLUtils.texSubImage2D(GLES20.GL_TEXTURE_2D,0,0,0,bitmap);
+    private void draw(Bitmap bitmap,Bitmap overlay,CameraLook look,long timestamp){
+        GLES20.glViewport(0,0,width,height);GLES20.glUseProgram(program);GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         int pos=GLES20.glGetAttribLocation(program,"aPosition"),uv=GLES20.glGetAttribLocation(program,"aTex");
         GLES20.glEnableVertexAttribArray(pos);GLES20.glEnableVertexAttribArray(uv);
         GLES20.glVertexAttribPointer(pos,2,GLES20.GL_FLOAT,false,0,vertices);GLES20.glVertexAttribPointer(uv,2,GLES20.GL_FLOAT,false,0,coords);GLES20.glUniform1i(GLES20.glGetUniformLocation(program,"uTexture"),0);
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP,0,4);
+        GLES20.glDisable(GLES20.GL_BLEND);drawLayer(bitmap,texture,allocated,look);allocated=true;
+        if(overlay!=null){GLES20.glEnable(GLES20.GL_BLEND);GLES20.glBlendFunc(GLES20.GL_ONE,GLES20.GL_ONE_MINUS_SRC_ALPHA);drawLayer(overlay,overlayTexture,overlayAllocated,CameraLook.ORIGINAL);overlayAllocated=true;GLES20.glDisable(GLES20.GL_BLEND);}
         EGLExt.eglPresentationTimeANDROID(display,surface,timestamp);
         if(!EGL14.eglSwapBuffers(display,surface))throw new IllegalStateException("Video frame swap");
+    }
+    private void drawLayer(Bitmap bitmap,int id,boolean uploaded,CameraLook look){
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D,id);if(!uploaded)GLUtils.texImage2D(GLES20.GL_TEXTURE_2D,0,bitmap,0);else GLUtils.texSubImage2D(GLES20.GL_TEXTURE_2D,0,0,0,bitmap);
+        float radius=Math.min(width,height)*.0035f;GLES20.glUniform2f(GLES20.glGetUniformLocation(program,"offset"),radius/width,radius/height);
+        GLES20.glUniform1f(GLES20.glGetUniformLocation(program,"strength"),look.strength());GLES20.glUniform1f(GLES20.glGetUniformLocation(program,"softness"),look.softness());GLES20.glUniform1f(GLES20.glGetUniformLocation(program,"warmth"),look.warmth);
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP,0,4);
     }
     private void fail(String message){
         if(terminal)return;terminal=true;stopping=true;started=false;release();
@@ -111,6 +119,7 @@ final class VideoEncoder {
         if(display!=EGL14.EGL_NO_DISPLAY){
             if(program!=0)GLES20.glDeleteProgram(program);
             if(texture!=0)GLES20.glDeleteTextures(1,new int[]{texture},0);
+            if(overlayTexture!=0)GLES20.glDeleteTextures(1,new int[]{overlayTexture},0);
             EGL14.eglMakeCurrent(display,EGL14.EGL_NO_SURFACE,EGL14.EGL_NO_SURFACE,EGL14.EGL_NO_CONTEXT);
             if(surface!=EGL14.EGL_NO_SURFACE)EGL14.eglDestroySurface(display,surface);
             if(context!=EGL14.EGL_NO_CONTEXT)EGL14.eglDestroyContext(display,context);

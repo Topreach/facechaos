@@ -162,6 +162,16 @@ final class AppText {
   case "The camera opens on the next screen. Nothing is posted automatically.":return c.getString(R.string.fc_home_privacy_note);
   case "Duration %1$s":return c.getString(R.string.fc_clip_duration);
   case "One recording covers this game\u2019s retries and stages. Tap Stop to finish, then Clip to review or save. Maximum 2 minutes.":return c.getString(R.string.fc_record_session_note);
+  case "\u2728 Look":return c.getString(R.string.fc_look_button);
+  case "Camera look":return c.getString(R.string.fc_look_title);
+  case "Gentle brightening, warmth and smoothing for your selfie and recordings. Your face shape stays unchanged.":return c.getString(R.string.fc_look_note);
+  case "Off":return c.getString(R.string.fc_look_off);
+  case "Natural":return c.getString(R.string.fc_look_natural);
+  case "Smooth":return c.getString(R.string.fc_look_smooth);
+  case "Intensity":return c.getString(R.string.fc_look_intensity);
+  case "Warmth":return c.getString(R.string.fc_look_warmth);
+  case "Compare original preview":return c.getString(R.string.fc_look_compare);
+  case "Smoothing is unavailable on this device. Brightening and warmth still work.":return c.getString(R.string.fc_look_smoothing_unavailable);
  default:return source;}}
  static String[] items(Context c,String[] source){String[] result=source.clone();for(int i=0;i<result.length;i++)result[i]=t(c,result[i]);return result;}
  static String brief(Context c,int mode){int[] ids={R.string.fc_brief0,R.string.fc_brief1,R.string.fc_brief2,R.string.fc_brief3,R.string.fc_brief4,R.string.fc_brief5,R.string.fc_brief6,R.string.fc_brief7,R.string.fc_brief8,R.string.fc_brief9,R.string.fc_brief10,R.string.fc_brief11,R.string.fc_brief12,R.string.fc_brief13,R.string.fc_brief14};return c.getString(ids[mode]);}

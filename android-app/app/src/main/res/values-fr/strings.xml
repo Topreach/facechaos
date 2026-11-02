@@ -158,4 +158,14 @@
     <string name="fc_home_privacy_note">La caméra s’ouvre à l’écran suivant. Rien n’est publié automatiquement.</string>
     <string name="fc_clip_duration">Durée %1$s</string>
     <string name="fc_record_session_note">Un enregistrement couvre les essais et étapes du jeu. Touchez Arrêter pour terminer, puis Vidéo pour revoir ou enregistrer. Maximum 2 minutes.</string>
+    <string name="fc_look_button">✨ Effet</string>
+    <string name="fc_look_title">Effet caméra</string>
+    <string name="fc_look_note">Éclaircissement doux, chaleur et lissage pour votre selfie et vos vidéos, sans modifier la forme du visage.</string>
+    <string name="fc_look_off">Aucun</string>
+    <string name="fc_look_natural">Naturel</string>
+    <string name="fc_look_smooth">Lissé</string>
+    <string name="fc_look_intensity">Intensité</string>
+    <string name="fc_look_warmth">Chaleur</string>
+    <string name="fc_look_compare">Comparer à l’aperçu original</string>
+    <string name="fc_look_smoothing_unavailable">Le lissage n’est pas disponible sur cet appareil. L’éclaircissement et la chaleur restent disponibles.</string>
 </resources>
