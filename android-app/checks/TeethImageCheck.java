@@ -19,6 +19,9 @@ public final class TeethImageCheck {
   }
   int[] small=new int[12*12];require(Float.isNaN(TeethEvidence.measure(small,12,12,new float[]{1,10,10,1},new float[]{1,1,10,10})),"Insufficient tooth detail must be reported as unavailable");
   int[] narrow=new int[100*20];java.util.Arrays.fill(narrow,0xFF301010);
+  int[] front=new int[100*20];java.util.Arrays.fill(front,0xFF301010);
+  for(int y=8;y<10;y++)for(int x=41;x<59;x++)front[y*100+x]=0xFFF2EEE0;
+  require(TeethEvidence.measure(front,100,20,new float[]{10,90,90,10},new float[]{7,7,11,11})>=FaceSignals.teethThreshold(1),"A coherent visible front-tooth band can pass without exposing the full tooth row");
   float[] nx={10,90,90,10},ny={8,8,10,10};
   for(int y=8;y<10;y++)for(int x=20;x<80;x++)narrow[y*100+x]=0xFFF2EEE0;
   require(TeethEvidence.measure(narrow,100,20,nx,ny)>.8f,"Visible teeth with a nearly closed jaw must count without a mouth aspect ratio requirement");

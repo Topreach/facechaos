@@ -48,7 +48,9 @@ final class TeethEvidence {
   int widest=0,supported=0;for(int count:toothBands){widest=Math.max(widest,count);if(count>=Math.max(4,(maxX-minX)*.20f))supported++;}
   if(supported<2)return 0;
   float fraction=toothPixels/(float)area,coverage=widest/(maxX-minX);
-  return Math.max(0,Math.min(1,Math.min((fraction-.015f)/.08f,(coverage-.10f)/.45f)));
+  // Front teeth need not span most of the lip width. The two-row support
+  // check already rejects tiny highlights; do not penalize partial tooth rows twice.
+  return Math.max(0,Math.min(1,Math.min((fraction-.015f)/.08f,coverage/.35f)));
  }
  private static int maxColor(int rgb){return Math.max(rgb>>16&255,Math.max(rgb>>8&255,rgb&255));}
  private static boolean pale(int rgb,int floor){int r=rgb>>16&255,g=rgb>>8&255,b=rgb&255,max=Math.max(r,Math.max(g,b)),min=Math.min(r,Math.min(g,b));return max>=floor&&(max-min)*255<=max*105&&r-g<=.65f*Math.max(0,g-b)+12;}
