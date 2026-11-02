@@ -97,8 +97,6 @@ public final class MainActivity extends Activity {
         if(overlay.getVisibility()==View.VISIBLE && overlay.game.finished && !handledResult){
             handledResult=true;
             if(!overlay.game.stopped){android.content.SharedPreferences ratings=getSharedPreferences("ratings",0);ratings.edit().putInt("completed_rounds",ratings.getInt("completed_rounds",0)+1).apply();}
-            VideoEncoder owner=encoder;
-            if(owner!=null)ui.postDelayed(()->{if(encoder==owner)stopVideo(null);},1000);
         }
         if(gameVisible()&&overlay.game.finished){stopMicrophone();if(!faceLab)stopFaceRecognition();stopCountrySpeech();}
         if(gameVisible()&&overlay.game.mode==14&&countrySpeech!=null&&!overlay.game.quizListening){stopCountrySpeech();nextCountrySpeech=SystemClock.uptimeMillis()+1400;}
@@ -264,16 +262,20 @@ public final class MainActivity extends Activity {
     private void previewGame(int mode){previewGame(mode,1);}
     private void previewGame(int mode,int stage) {previewGame(mode,stage,0);}
     private void previewGame(int mode,int stage,int carriedCoins) {
+        enterGame(mode,stage,carriedCoins,false);
+    }
+    private void enterGame(int mode,int stage,int carriedCoins,boolean continuingRound) {
+        boolean keepRecording=continuingRound&&encoder!=null&&!preparingVideo&&!finishingVideo&&overlay.game.mode==mode;
         final int requestedSession=++gameGeneration;
         pendingInputSwitch=false;
         stopAnimalGuide();stopCountrySpeech();stopMicrophone();stopFaceRecognition();
         if(gameAudio!=null)gameAudio.suspend();
         overlay.saveCoins();overlay.game.cancelTouch();
         setRoundPaused(true);overlay.game.stopRound();handledResult=true;
-        Runnable start=()->{if(requestedSession==gameGeneration)startGameSession(mode,stage,carriedCoins);};
-        if(encoder!=null)stopVideo(start);else start.run();
+        Runnable start=()->{if(requestedSession==gameGeneration)startGameSession(mode,stage,carriedCoins,!continuingRound);};
+        if(encoder!=null&&!keepRecording)stopVideo(start);else start.run();
     }
-    private void startGameSession(int mode,int stage,int carriedCoins) {
+    private void startGameSession(int mode,int stage,int carriedCoins,boolean newRecordingRequested) {
         stopAnimalGuide();
         stopCountrySpeech();stopMicrophone();stopFaceRecognition();
         nextCountrySpeech=0;lastFaceResult=0;
@@ -322,7 +324,7 @@ public final class MainActivity extends Activity {
         overlay.game.microphoneMode=mode==14?quizVoice:MiniGame.supportsMicrophone(mode)&&useVoiceMicrophone;
         overlay.game.faceMode=MiniGame.supportsFace(mode)&&faceChoice;
         if(mode==14&&!quizVoice)overlay.game.quizStatus="Microphone off. Tap the card to type.";
-        if(recordSwitch.isChecked()){setRoundPaused(true);beginVideo(()->setRoundPaused(false));}
+        if(newRecordingRequested&&recordSwitch.isChecked()&&encoder==null){setRoundPaused(true);beginVideo(()->setRoundPaused(false));}
         else setRoundPaused(false);
         updateCaptureControls();
     }
@@ -364,7 +366,13 @@ public final class MainActivity extends Activity {
         java.util.Arrays.sort(clips,(a,b)->Long.compare(b.lastModified(),a.lastModified()));String[] labels=new String[clips.length];
         java.text.DateFormat date=java.text.DateFormat.getDateTimeInstance(java.text.DateFormat.MEDIUM,java.text.DateFormat.SHORT);
         for(int i=0;i<clips.length;i++)labels[i]=date.format(new java.util.Date(clips[i].lastModified()))+" - "+String.format(Locale.US,"%.1f MB",clips[i].length()/1048576f);
-        boolean[] selected={false};AlertDialog library=new AlertDialog.Builder(this).setTitle(AppText.t(MainActivity.this,"My recordings - newest first")).setItems(labels,(d,index)->{selected[0]=true;setRoundPaused(wasPaused);showClip(clips[index]);}).setNegativeButton(AppText.t(MainActivity.this,"Close"),null).create();library.setOnDismissListener(d->{if(!selected[0]&&resumed)setRoundPaused(wasPaused);});library.show();
+        android.widget.ArrayAdapter<String> adapter=new android.widget.ArrayAdapter<>(this,android.R.layout.simple_list_item_1,new java.util.ArrayList<>(java.util.Arrays.asList(labels)));
+        boolean[] selected={false};AlertDialog library=new AlertDialog.Builder(this).setTitle(AppText.t(MainActivity.this,"My recordings - newest first")).setAdapter(adapter,(d,index)->{selected[0]=true;setRoundPaused(wasPaused);showClip(clips[index]);}).setNegativeButton(AppText.t(MainActivity.this,"Close"),null).create();library.setOnDismissListener(d->{if(!selected[0]&&resumed)setRoundPaused(wasPaused);});library.show();
+        new Thread(()->{
+            String[] details=labels.clone();
+            for(int i=0;i<clips.length;i++){long duration=ClipDetails.duration(clips[i]);if(duration>=0)details[i]=labels[i]+" - "+getString(R.string.fc_clip_duration,ClipDetails.time(duration));}
+            ui.post(()->{if(!isFinishing()&&!isDestroyed()&&library.isShowing()){adapter.clear();adapter.addAll(details);adapter.notifyDataSetChanged();}});
+        },"FaceChaosClipDetails").start();
     }
     private void showRating(Runnable after){
         if(encoder!=null){Toast.makeText(this,"Finish recording before rating",Toast.LENGTH_LONG).show();return;}
@@ -649,6 +657,7 @@ public final class MainActivity extends Activity {
         if(entry.id==14){Switch spoken=new Switch(this);spoken.setText(AppText.t(MainActivity.this,"Say country names (microphone)"));spoken.setTextColor(0xFF173E42);spoken.setChecked(quizVoice);spoken.setOnCheckedChangeListener((button,checked)->quizVoice=checked);body.addView(spoken);}
         Switch roundRecording=new Switch(this);roundRecording.setText(AppText.t(MainActivity.this,"Record my round (silent)"));roundRecording.setTextColor(0xFF173E42);roundRecording.setPadding(dp(10),dp(12),dp(10),dp(12));roundRecording.setChecked(recordSwitch.isChecked());
         roundRecording.setOnCheckedChangeListener((button,checked)->recordSwitch.setChecked(checked));body.addView(roundRecording);
+        body.addView(sheetText(getString(R.string.fc_record_session_note),12,0xFF52736B));
         scroll.addView(body);shell.addView(scroll,new LinearLayout.LayoutParams(-1,0,1));
         Button start=new Button(this);start.setText(AppText.t(MainActivity.this,"Let's play!  \u25B6"));start.setAllCaps(false);start.setTextSize(18);start.setTextColor(0xFF173E42);start.setTypeface(null,android.graphics.Typeface.BOLD);start.setBackground(cardBackground(entry.color,0xFF173E42));start.setBackgroundTintList(null);
         start.setOnClickListener(v->{stopAnimalGuide();brief.setOnDismissListener(null);brief.dismiss();
@@ -686,7 +695,7 @@ public final class MainActivity extends Activity {
         else if(recordSwitch.isChecked())beginVideo(()->setRoundPaused(false));
         else showGames();
     }
-    private void runStage(int mode,int stage,int carriedCoins){previewGame(mode,stage,carriedCoins);}
+    private void runStage(int mode,int stage,int carriedCoins){enterGame(mode,stage,carriedCoins,true);}
     private void retryRound(){runStage(overlay.game.mode,1,0);}
     private void nextOrRetryStage(){
         MiniGame current=overlay.game;Runnable next=()->runStage(current.mode,current.nextRunStage(),current.coinsForNextStage());
@@ -844,6 +853,7 @@ public final class MainActivity extends Activity {
         boolean wasPaused=paused;setRoundPaused(true);
         LinearLayout body=new LinearLayout(this);body.setOrientation(LinearLayout.VERTICAL);body.setPadding(dp(12),dp(8),dp(12),dp(8));
         VideoView video=new VideoView(this);body.addView(video,new LinearLayout.LayoutParams(-1,dp(320)));
+        TextView clipLength=sheetText("",13,0xFF314B50);body.addView(clipLength);
         body.addView(sheetText("Camera + game - silent video. Saved inside Face Chaos. Save to Gallery copies it to Movies / Face Chaos. Share opens your chosen app; you decide whether to post.",13,0xFF314B50));
         Button delete=new Button(this);delete.setText(AppText.t(MainActivity.this,"Delete this clip"));body.addView(delete);
         AlertDialog review=new AlertDialog.Builder(this,android.R.style.Theme_Material_Light_Dialog_Alert).setTitle(AppText.t(MainActivity.this,"Review your clip")).setView(body)
@@ -852,7 +862,7 @@ public final class MainActivity extends Activity {
         delete.setOnClickListener(v->new AlertDialog.Builder(this).setTitle(AppText.t(MainActivity.this,"Delete this local clip?")).setMessage("A copy already saved to your gallery will remain.")
             .setPositiveButton(AppText.t(MainActivity.this,"Delete"),(d,w)->{if(clip.delete()){if(clip.equals(lastClip)){lastClip=null;getPreferences(0).edit().remove("last_clip").apply();}review.dismiss();updateCaptureControls();}}).setNegativeButton(AppText.t(MainActivity.this,"Keep"),null).show());
         review.setOnDismissListener(dialog->{video.stopPlayback();if(resumed)setRoundPaused(wasPaused);});review.show();
-        MediaController media=new MediaController(this);media.setAnchorView(video);video.setMediaController(media);video.setVideoURI(Uri.fromFile(clip));video.setOnPreparedListener(player->video.start());
+        MediaController media=new MediaController(this);media.setAnchorView(video);video.setMediaController(media);video.setVideoURI(Uri.fromFile(clip));video.setOnPreparedListener(player->{clipLength.setText(getString(R.string.fc_clip_duration,ClipDetails.time(player.getDuration())));video.start();});
     }
     private void shareClip(File file){
         if(!file.isFile()){Toast.makeText(this,"Recording not found",Toast.LENGTH_LONG).show();return;}

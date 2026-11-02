@@ -14,8 +14,8 @@ android {
         applicationId 'com.facechaos.mobile'
         minSdk 26
         targetSdk 36
-        versionCode 58
-        versionName '0.21.0-setup.4'
+        versionCode 59
+        versionName '0.21.0-setup.5'
         testInstrumentationRunner 'com.facechaos.mobile.SceneCheck'
     }
     signingConfigs {
@@ -48,7 +48,15 @@ android {
                 matchingFallbacks = ['release']
             }
         }
+        if (project.hasProperty('recordingCheck')) {
+            recordingCheck {
+                initWith debug
+                applicationIdSuffix '.verify'
+                matchingFallbacks = ['debug']
+            }
+        }
     }
+    if (project.hasProperty('recordingCheck')) { testBuildType 'recordingCheck' }
     if (project.hasProperty('optimizedCheck')) {
         sourceSets.verification.assets.srcDirs += ['src/androidTest/assets']
     }

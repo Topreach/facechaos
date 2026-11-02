@@ -156,4 +156,6 @@
     <string name="fc_home_record_note">In the game’s instructions, turn on “%1$s” to record yourself playing. Share your clip on social media.</string>
     <string name="fc_home_start">Let’s play</string>
     <string name="fc_home_privacy_note">The camera opens on the next screen. Nothing is posted automatically.</string>
+    <string name="fc_clip_duration">Duration %1$s</string>
+    <string name="fc_record_session_note">One recording covers this game’s retries and stages. Tap Stop to finish, then Clip to review or save. Maximum 2 minutes.</string>
 </resources>

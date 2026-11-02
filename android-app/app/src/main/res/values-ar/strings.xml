@@ -156,4 +156,6 @@
     <string name="fc_home_record_note">فعّل «%1$s» في تعليمات اللعبة لتسجيل نفسك أثناء اللعب. شارك مقطعك على وسائل التواصل الاجتماعي.</string>
     <string name="fc_home_start">لنلعب</string>
     <string name="fc_home_privacy_note">تفتح الكاميرا في الشاشة التالية. لا يُنشر أي شيء تلقائيًا.</string>
+    <string name="fc_clip_duration">المدة %1$s</string>
+    <string name="fc_record_session_note">يشمل التسجيل الواحد إعادة المحاولات ومراحل هذه اللعبة. اضغط إيقاف لإنهائه، ثم المقطع للمراجعة أو الحفظ. الحد الأقصى دقيقتان.</string>
 </resources>

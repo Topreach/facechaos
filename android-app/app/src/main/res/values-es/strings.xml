@@ -156,4 +156,6 @@
     <string name="fc_home_record_note">En las instrucciones del juego, activa «%1$s» para grabarte jugando. Comparte tu vídeo en las redes sociales.</string>
     <string name="fc_home_start">¡A jugar!</string>
     <string name="fc_home_privacy_note">La cámara se abre en la siguiente pantalla. No se publica nada automáticamente.</string>
+    <string name="fc_clip_duration">Duración %1$s</string>
+    <string name="fc_record_session_note">Una grabación incluye los reintentos y etapas del juego. Toca Detener para terminar y Vídeo para revisar o guardar. Máximo 2 minutos.</string>
 </resources>

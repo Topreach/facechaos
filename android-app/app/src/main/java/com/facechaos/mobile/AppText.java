@@ -160,6 +160,8 @@ final class AppText {
   case "In the game\u2019s instructions, turn on \u201c%1$s\u201d to record yourself playing. Share your clip on social media.":return c.getString(R.string.fc_home_record_note);
   case "Let\u2019s play":return c.getString(R.string.fc_home_start);
   case "The camera opens on the next screen. Nothing is posted automatically.":return c.getString(R.string.fc_home_privacy_note);
+  case "Duration %1$s":return c.getString(R.string.fc_clip_duration);
+  case "One recording covers this game\u2019s retries and stages. Tap Stop to finish, then Clip to review or save. Maximum 2 minutes.":return c.getString(R.string.fc_record_session_note);
  default:return source;}}
  static String[] items(Context c,String[] source){String[] result=source.clone();for(int i=0;i<result.length;i++)result[i]=t(c,result[i]);return result;}
  static String brief(Context c,int mode){int[] ids={R.string.fc_brief0,R.string.fc_brief1,R.string.fc_brief2,R.string.fc_brief3,R.string.fc_brief4,R.string.fc_brief5,R.string.fc_brief6,R.string.fc_brief7,R.string.fc_brief8,R.string.fc_brief9,R.string.fc_brief10,R.string.fc_brief11,R.string.fc_brief12,R.string.fc_brief13,R.string.fc_brief14};return c.getString(ids[mode]);}
