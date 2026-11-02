@@ -16,7 +16,9 @@ final class TeethEvidence {
   for(int i=0;i<xs.length;i++){float normal=ys[i]-slope*xs[i];minNormal=Math.min(minNormal,normal);maxNormal=Math.max(maxNormal,normal);}
   // Jaw opening is asymmetric around the corners. Use the midpoint between the
   // upper/lower inner lips along that axis, rather than the corner height itself.
-  if(maxNormal-minNormal<Math.max(2,(maxX-minX)*.04f))return 0;
+  // A comfortable teeth display may have an almost closed jaw. Do not demand
+  // a jaw-opening/width ratio: the coherent pale band below is the evidence.
+  if(maxNormal-minNormal<2)return 0;
   int[] toothBands=new int[(int)Math.ceil(maxNormal-minNormal)+2];
   int area=0,toothPixels=0,candidates=0;
   boolean[] mask=new boolean[pixels.length];int[] brightness=new int[256],neutralBrightness=new int[256];

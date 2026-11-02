@@ -7,6 +7,10 @@ public final class FaceInputCheck {
  public static void main(String[] args){
   for(int expression=0;expression<4;expression++){FaceSignals f=calibrated();require(detect(f,expression,2000)==expression,"Distinct expression "+expression);require(detect(f,expression,3000)==-1,"Held expression fires once");neutral(f,4000);require(detect(f,expression,4500)==expression,"Neutral rearms expression");f.lost();require(detect(f,expression,6000)==-1,"Lost tracking requires neutral before rearm");}
   FaceSignals f=calibrated();require(f.accept(.8f,.8f,.02f,.9f,2000,1)==-1,"Ambiguous tooth display waits for stability");require(f.accept(.8f,.8f,.02f,.9f,2200,1)==2,"Actual teeth evidence has priority over mouth/smile");
+  FaceSignals teethGate=calibrated();
+  for(int t=2000;t<2400;t+=60)require(teethGate.accept(.7f,.1f,.02f,0,t,1,FaceSignals.TEETH)==-1,"Opening the mouth alone cannot pass the teeth gate or consume its rearm");
+  require(teethGate.accept(.05f,.8f,.02f,.9f,2500,1,FaceSignals.TEETH)==-1,"A toothy smile still requires stable image evidence");
+  require(teethGate.accept(.05f,.8f,.02f,.9f,2680,1,FaceSignals.TEETH)==FaceSignals.TEETH,"Visible teeth with a nearly closed jaw and a smile pass the teeth gate");
   FaceSignals uncalibrated=new FaceSignals();for(int i=0;i<20;i++)uncalibrated.accept(.8f,0,0,0,i*125,1);require(!uncalibrated.ready,"Open mouth cannot become neutral baseline");
   int[] image=new int[80*40];float[] xs={10,70,70,10},ys={5,5,35,35};java.util.Arrays.fill(image,0xFF301010);require(TeethEvidence.measure(image,80,40,xs,ys)==0,"Dark open mouth has no teeth evidence");java.util.Arrays.fill(image,0xFFE9A4A2);require(TeethEvidence.measure(image,80,40,xs,ys)==0,"Pink lip/tongue pixels are not teeth");java.util.Arrays.fill(image,0xFFF2EEE0);require(TeethEvidence.measure(image,80,40,xs,ys)>.8f,"White/ivory mouth pixels give direct evidence");java.util.Arrays.fill(image,0xFF301010);for(int y=5;y<15;y++)for(int x=10;x<70;x++)image[y*80+x]=0xFFF2EEE0;require(TeethEvidence.measure(image,80,40,xs,ys)>.6f,"One visible tooth row counts as Show teeth");
   for(int mode:new int[]{0,1,2,5,6,7,10}){

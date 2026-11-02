@@ -18,6 +18,12 @@ public final class TeethImageCheck {
    require(evidence(slope,true,0xFF301010)==0,"Dark open mouth must not become teeth: "+slope);
   }
   int[] small=new int[12*12];require(Float.isNaN(TeethEvidence.measure(small,12,12,new float[]{1,10,10,1},new float[]{1,1,10,10})),"Insufficient tooth detail must be reported as unavailable");
+  int[] narrow=new int[100*20];java.util.Arrays.fill(narrow,0xFF301010);
+  float[] nx={10,90,90,10},ny={8,8,10,10};
+  for(int y=8;y<10;y++)for(int x=20;x<80;x++)narrow[y*100+x]=0xFFF2EEE0;
+  require(TeethEvidence.measure(narrow,100,20,nx,ny)>.8f,"Visible teeth with a nearly closed jaw must count without a mouth aspect ratio requirement");
+  java.util.Arrays.fill(narrow,0xFFE9A4A2);
+  require(TeethEvidence.measure(narrow,100,20,nx,ny)==0,"Thin pink closed lips must not pass as teeth");
   int[] asymmetric=new int[100*90];java.util.Arrays.fill(asymmetric,0xFF301010);
   float[] ax={20,50,80,50},ay={35,25,35,55};
   for(int y=25;y<40;y++)for(int x=20;x<80;x++)asymmetric[y*100+x]=0xFFF2EEE0;
