@@ -160,12 +160,16 @@
     <string name="fc_record_session_note">Una grabación incluye los reintentos y etapas del juego. Toca Detener para terminar y Vídeo para revisar o guardar. Máximo 2 minutos.</string>
     <string name="fc_look_button">✨ Estilo</string>
     <string name="fc_look_title">Estilo de cámara</string>
-    <string name="fc_look_note">Brillo suave, calidez y suavizado para tu selfie y tus vídeos, sin cambiar la forma de tu rostro.</string>
+    <string name="fc_look_note">Elige Natural o Suave. Ajusta la intensidad y mantén pulsado para ver el original.</string>
     <string name="fc_look_off">Sin efecto</string>
     <string name="fc_look_natural">Natural</string>
     <string name="fc_look_smooth">Suave</string>
     <string name="fc_look_intensity">Intensidad</string>
     <string name="fc_look_warmth">Calidez</string>
-    <string name="fc_look_compare">Comparar con la vista original</string>
+    <string name="fc_look_compare">Mantén pulsado para ver el original</string>
+    <string name="fc_look_original">Vista original</string>
     <string name="fc_look_smoothing_unavailable">El suavizado no está disponible en este dispositivo. El brillo y la calidez sí funcionan.</string>
+    <string name="fc_look_subtitle">Un poco de brillo. Siempre tú.</string>
+    <string name="fc_share_subtitle">Comparte un poco de Face Chaos</string>
+    <string name="fc_share_note">Elige una aplicación para preparar tu vídeo. Tú decides si lo publicas.</string>
 </resources>

@@ -136,7 +136,7 @@ public final class MainActivity extends Activity {
         root.setBackgroundColor(Color.rgb(23, 62, 66));
         preview = new TextureView(this);
         cameraLayer=new FrameLayout(this);cameraLayer.addView(preview,new FrameLayout.LayoutParams(-1,-1));root.addView(cameraLayer,new FrameLayout.LayoutParams(-1,-1));
-        android.content.SharedPreferences appearance=getSharedPreferences("appearance",0);cameraLook=new CameraLook(appearance.getInt("mode",CameraLook.NATURAL),appearance.getFloat("intensity",.35f),appearance.getFloat("warmth",0));lookPreview=new CameraLookPreview(cameraLayer);applyCameraLook();cameraLayer.addOnLayoutChangeListener((v,l,t,r,b,ol,ot,or,ob)->{if(r-l!=or-ol||b-t!=ob-ot)applyCameraLook();});
+        android.content.SharedPreferences appearance=getSharedPreferences("appearance",0);cameraLook=new CameraLook(appearance.getInt("mode",CameraLook.NATURAL),appearance.getFloat("intensity",.55f),appearance.getFloat("warmth",0));lookPreview=new CameraLookPreview(cameraLayer);applyCameraLook();cameraLayer.addOnLayoutChangeListener((v,l,t,r,b,ol,ot,or,ob)->{if(r-l!=or-ol||b-t!=ob-ot)applyCameraLook();});
         overlay = new GameOverlay(this);
         overlay.setVisibility(View.GONE);
         root.addView(overlay, new FrameLayout.LayoutParams(-1, -1));
@@ -883,7 +883,8 @@ public final class MainActivity extends Activity {
     }
     private void shareClip(File file){
         if(!file.isFile()){Toast.makeText(this,"Recording not found",Toast.LENGTH_LONG).show();return;}
-        new AlertDialog.Builder(this).setTitle(AppText.t(MainActivity.this,"Share your game video")).setItems(AppText.items(MainActivity.this,new String[]{"TikTok","Instagram","YouTube","WhatsApp","Other apps"}),(d,choice)->{
+        final boolean wasPaused=paused;final MiniGame owner=overlay.game;setRoundPaused(true);
+        SharePanel.show(this,choice->{
             String[] packages={"com.zhiliaoapp.musically","com.instagram.android","com.google.android.youtube","com.whatsapp"};
             Intent send=ClipSharing.video(this,file,choice<4?packages[choice]:null);
             try{startActivity(choice<4?send:Intent.createChooser(send,"Share your game video"));}
@@ -891,7 +892,7 @@ public final class MainActivity extends Activity {
                 if(choice==0){try{startActivity(ClipSharing.video(this,file,"com.ss.android.ugc.trill"));return;}catch(android.content.ActivityNotFoundException ignored){}}
                 try{startActivity(Intent.createChooser(ClipSharing.video(this,file,null),"Choose an installed video app"));}catch(android.content.ActivityNotFoundException unavailable){Toast.makeText(this,"No video-sharing app available. Save to Gallery instead.",Toast.LENGTH_LONG).show();}
             }
-        }).setNegativeButton(AppText.t(MainActivity.this,"Cancel"),null).show();
+        },()->{if(resumed&&overlay.game==owner)setRoundPaused(wasPaused);});
     }
     private void saveClip(File file){
         if(android.os.Build.VERSION.SDK_INT<29){exportClip=file;startActivityForResult(new Intent(Intent.ACTION_CREATE_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType("video/mp4").putExtra(Intent.EXTRA_TITLE,file.getName()),90);return;}

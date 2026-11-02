@@ -25,7 +25,7 @@ final class CameraLookPreview {
   private final android.graphics.RuntimeShader shader=new android.graphics.RuntimeShader(CameraLookShader.agsl());
   void apply(View view,CameraLook look){
    if(look.strength()==0){view.setRenderEffect(null);return;}
-   float radius=Math.max(1,Math.min(view.getWidth(),view.getHeight())*.0035f);
+   float radius=Math.max(1,Math.min(view.getWidth(),view.getHeight())*.006f);
    shader.setFloatUniform("offset",radius,radius);shader.setFloatUniform("strength",look.strength());shader.setFloatUniform("softness",look.softness());shader.setFloatUniform("warmth",look.warmth);
    view.setRenderEffect(android.graphics.RenderEffect.createRuntimeShaderEffect(shader,"image"));
   }

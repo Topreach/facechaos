@@ -12,15 +12,15 @@ final class CameraLookShader {
    vec3 b=sampleAt(p-vec2(offset.x,0.0)).rgb;
    vec3 d=sampleAt(p+vec2(0.0,offset.y)).rgb;
    vec3 e=sampleAt(p-vec2(0.0,offset.y)).rgb;
-   float wa=exp(-dot(a-color,a-color)*80.0);
-   float wb=exp(-dot(b-color,b-color)*80.0);
-   float wd=exp(-dot(d-color,d-color)*80.0);
-   float we=exp(-dot(e-color,e-color)*80.0);
+   float wa=exp(-dot(a-color,a-color)*48.0);
+   float wb=exp(-dot(b-color,b-color)*48.0);
+   float wd=exp(-dot(d-color,d-color)*48.0);
+   float we=exp(-dot(e-color,e-color)*48.0);
    vec3 soft=(color*2.0+a*wa+b*wb+d*wd+e*we)/(2.0+wa+wb+wd+we);
    color=mix(color,soft,softness);
   }
-  float lift=0.10*strength;
-  color=color*(1.0-lift)+vec3(lift)+vec3(0.025,0.0,-0.025)*warmth*strength;
+  float lift=0.22*strength;
+  color=color*(1.0-lift)+vec3(lift)+vec3(0.075,0.0,-0.075)*warmth*strength;
   return vec4(clamp(color,0.0,1.0),c.a);
  }
  """;

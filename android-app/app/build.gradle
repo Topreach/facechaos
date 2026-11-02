@@ -14,8 +14,8 @@ android {
         applicationId 'com.facechaos.mobile'
         minSdk 26
         targetSdk 36
-        versionCode 60
-        versionName '0.21.0-setup.6'
+        versionCode 62
+        versionName '0.21.0-setup.8'
         testInstrumentationRunner 'com.facechaos.mobile.SceneCheck'
     }
     signingConfigs {

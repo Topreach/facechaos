@@ -106,7 +106,7 @@ final class VideoEncoder {
     }
     private void drawLayer(Bitmap bitmap,int id,boolean uploaded,CameraLook look){
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D,id);if(!uploaded)GLUtils.texImage2D(GLES20.GL_TEXTURE_2D,0,bitmap,0);else GLUtils.texSubImage2D(GLES20.GL_TEXTURE_2D,0,0,0,bitmap);
-        float radius=Math.min(width,height)*.0035f;GLES20.glUniform2f(GLES20.glGetUniformLocation(program,"offset"),radius/width,radius/height);
+        float radius=Math.min(width,height)*.006f;GLES20.glUniform2f(GLES20.glGetUniformLocation(program,"offset"),radius/width,radius/height);
         GLES20.glUniform1f(GLES20.glGetUniformLocation(program,"strength"),look.strength());GLES20.glUniform1f(GLES20.glGetUniformLocation(program,"softness"),look.softness());GLES20.glUniform1f(GLES20.glGetUniformLocation(program,"warmth"),look.warmth);
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP,0,4);
     }

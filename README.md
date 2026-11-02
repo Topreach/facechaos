@@ -17,7 +17,7 @@ Android camera-overlay mini-games controlled with facial expressions, head movem
 
 ## Build and test
 
-The quality-fix branch builds version 60 (`0.21.0-setup.6`), adding [camera brightening, warmth and optional smoothing](docs/CAMERA_LOOK_060.md) to preview and recordings while keeping recognition input original. It retains [continuous recording](docs/RECORDING_059.md), the [welcome homepage](docs/WELCOME_057.md), R8 optimization, bundled translations, updated Fragment and adaptive orientation/resizing support. Billing setup remains inactive; see [quality fixes](docs/PLAY_QUALITY_055.md) and [optimization notes](docs/PLAY_OPTIMIZATION_056.md).
+The quality-fix branch builds version 62 (`0.21.0-setup.8`), improving [camera brightening, warmth and smoothing](docs/CAMERA_LOOK_060.md) with a clearer effect and momentary original comparison, plus [Canvas Look and Share panels](docs/CANVAS_PANELS_062.md). Preview and recordings share the effect while recognition input stays original. It retains [continuous recording](docs/RECORDING_059.md), the [welcome homepage](docs/WELCOME_057.md), R8 optimization, bundled translations, updated Fragment and adaptive orientation/resizing support. Billing setup remains inactive; see [quality fixes](docs/PLAY_QUALITY_055.md) and [optimization notes](docs/PLAY_OPTIMIZATION_056.md).
 
 Use Android SDK 36 and Java 17 or newer. From `android-app`:
 

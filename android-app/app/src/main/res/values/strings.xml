@@ -160,12 +160,16 @@
     <string name="fc_record_session_note">One recording covers this game’s retries and stages. Tap Stop to finish, then Clip to review or save. Maximum 2 minutes.</string>
     <string name="fc_look_button">✨ Look</string>
     <string name="fc_look_title">Camera look</string>
-    <string name="fc_look_note">Gentle brightening, warmth and smoothing for your selfie and recordings. Your face shape stays unchanged.</string>
+    <string name="fc_look_note">Choose Natural or Smooth. Adjust intensity; hold below for the original.</string>
     <string name="fc_look_off">Off</string>
     <string name="fc_look_natural">Natural</string>
     <string name="fc_look_smooth">Smooth</string>
     <string name="fc_look_intensity">Intensity</string>
     <string name="fc_look_warmth">Warmth</string>
-    <string name="fc_look_compare">Compare original preview</string>
+    <string name="fc_look_compare">Hold to see original</string>
+    <string name="fc_look_original">Original preview</string>
     <string name="fc_look_smoothing_unavailable">Smoothing is unavailable on this device. Brightening and warmth still work.</string>
+    <string name="fc_look_subtitle">A little glow. Still you.</string>
+    <string name="fc_share_subtitle">Share a little Face Chaos</string>
+    <string name="fc_share_note">Choose an app to prepare your clip. You decide whether to post it.</string>
 </resources>

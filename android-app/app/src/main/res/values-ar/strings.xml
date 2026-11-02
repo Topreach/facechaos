@@ -160,12 +160,16 @@
     <string name="fc_record_session_note">يشمل التسجيل الواحد إعادة المحاولات ومراحل هذه اللعبة. اضغط إيقاف لإنهائه، ثم المقطع للمراجعة أو الحفظ. الحد الأقصى دقيقتان.</string>
     <string name="fc_look_button">✨ المظهر</string>
     <string name="fc_look_title">مظهر الكاميرا</string>
-    <string name="fc_look_note">إضاءة لطيفة ودفء وتنعيم لصورة الكاميرا وتسجيلاتك، دون تغيير شكل وجهك.</string>
+    <string name="fc_look_note">اختر طبيعي أو ناعم واضبط الشدة. اضغط مطولًا أدناه لرؤية الأصل.</string>
     <string name="fc_look_off">إيقاف</string>
     <string name="fc_look_natural">طبيعي</string>
     <string name="fc_look_smooth">ناعم</string>
     <string name="fc_look_intensity">الشدة</string>
     <string name="fc_look_warmth">الدفء</string>
-    <string name="fc_look_compare">مقارنة بصورة الكاميرا الأصلية</string>
+    <string name="fc_look_compare">اضغط مطولًا لرؤية الأصل</string>
+    <string name="fc_look_original">المعاينة الأصلية</string>
     <string name="fc_look_smoothing_unavailable">التنعيم غير متاح على هذا الجهاز. يمكنك استخدام الإضاءة والدفء.</string>
+    <string name="fc_look_subtitle">إشراقة لطيفة، وملامحك كما هي.</string>
+    <string name="fc_share_subtitle">شارك مرح Face Chaos</string>
+    <string name="fc_share_note">اختر تطبيقًا لتجهيز مقطعك. أنت من يقرر نشره.</string>
 </resources>
