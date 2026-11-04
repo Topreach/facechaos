@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="fc_language_home_note">Choose your language, then tap Apply. Device language follows your phone settings.</string>
+    <string name="fc_library_subtitle">Your best moments, ready to replay</string>
+    <string name="fc_language_subtitle">Play in your own words</string>
+    <string name="fc_language_apply">Apply language</string>
+    <string name="fc_library_empty_title">Your first clip starts here</string>
+    <string name="fc_library_recording">Recording %1$d</string>
+    <string name="fc_library_open">Play recording</string>
     <string name="fc_language">Language</string>
     <string name="fc_privacy">Privacy policy</string>
     <string name="fc_privacy_sub">How your camera, voice and clips are used</string>

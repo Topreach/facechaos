@@ -29,9 +29,7 @@ public final class WelcomeActivity extends Activity {
   getWindow().setNavigationBarColor(0xFFEAF4EE);if(android.os.Build.VERSION.SDK_INT>=29)getWindow().setNavigationBarContrastEnforced(false);
  }
  private void chooseLanguage(){
-  String[] names=AppLanguage.NAMES.clone();names[0]=getString(R.string.fc_system);int selected=0;String code=AppLanguage.current(this);
-  for(int i=0;i<AppLanguage.CODES.length;i++)if(AppLanguage.CODES[i].equals(code))selected=i;
-  new AlertDialog.Builder(this).setTitle(R.string.fc_language).setSingleChoiceItems(names,selected,(dialog,index)->{dialog.dismiss();AppLanguage.set(this,AppLanguage.CODES[index]);}).setNegativeButton(android.R.string.cancel,null).show();
+  android.app.Dialog[] picker={null};LanguagePanel panel=new LanguagePanel(this,AppLanguage.current(this),false,code->{picker[0].dismiss();AppLanguage.set(this,code);});picker[0]=CanvasSheet.show(this,3,panel,null);
  }
 }
 

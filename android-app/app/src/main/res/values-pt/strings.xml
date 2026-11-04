@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="fc_language_home_note">Escolha um idioma e toque em Aplicar. O idioma do dispositivo segue as configurações do telefone.</string>
+    <string name="fc_library_subtitle">Seus melhores momentos para rever</string>
+    <string name="fc_language_subtitle">Jogue no seu idioma</string>
+    <string name="fc_language_apply">Aplicar idioma</string>
+    <string name="fc_library_empty_title">Seu primeiro vídeo começa aqui</string>
+    <string name="fc_library_recording">Gravação %1$d</string>
+    <string name="fc_library_open">Reproduzir gravação</string>
     <string name="fc_language">Idioma</string>
     <string name="fc_privacy">Política de privacidade</string>
     <string name="fc_privacy_sub">Como a câmera, a voz e os vídeos são usados</string>

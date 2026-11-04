@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="fc_language_home_note">اختر لغتك ثم اضغط تطبيق. لغة الجهاز تتبع إعدادات هاتفك.</string>
+    <string name="fc_library_subtitle">أفضل لحظاتك، جاهزة للمشاهدة</string>
+    <string name="fc_language_subtitle">العب بلغتك</string>
+    <string name="fc_language_apply">تطبيق اللغة</string>
+    <string name="fc_library_empty_title">مقطعك الأول يبدأ هنا</string>
+    <string name="fc_library_recording">تسجيل %1$d</string>
+    <string name="fc_library_open">تشغيل التسجيل</string>
     <string name="fc_language">اللغة</string>
     <string name="fc_privacy">سياسة الخصوصية</string>
     <string name="fc_privacy_sub">كيف تُستخدم الكاميرا والصوت والمقاطع</string>

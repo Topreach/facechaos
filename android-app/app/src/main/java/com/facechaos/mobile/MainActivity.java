@@ -366,27 +366,18 @@ public final class MainActivity extends Activity {
     private void showLanguage(){
         boolean wasPaused=paused;setRoundPaused(true);
         if(encoder!=null){Toast.makeText(this,getString(R.string.fc_language_notice),Toast.LENGTH_LONG).show();setRoundPaused(wasPaused);return;}
-        String[] names=AppLanguage.NAMES.clone();names[0]=getString(R.string.fc_system);int checked=0;String code=AppLanguage.current(this);for(int i=0;i<AppLanguage.CODES.length;i++)if(AppLanguage.CODES[i].equals(code))checked=i;
-        boolean[] confirming={false};AlertDialog picker=new AlertDialog.Builder(this).setTitle(R.string.fc_language).setSingleChoiceItems(names,checked,(dialog,index)->{
-            String target=AppLanguage.CODES[index];if(target.equals(AppLanguage.current(this))){dialog.dismiss();return;}confirming[0]=true;dialog.dismiss();
-            AlertDialog confirm=new AlertDialog.Builder(this).setTitle(R.string.fc_language).setMessage(R.string.fc_language_notice).setPositiveButton(android.R.string.ok,(d,w)->AppLanguage.set(this,target)).setNegativeButton(android.R.string.cancel,null).create();confirm.setOnDismissListener(d->{if(resumed)setRoundPaused(wasPaused);});confirm.show();
-        }).setNegativeButton(android.R.string.cancel,null).create();picker.setOnDismissListener(d->{if(!confirming[0]&&resumed)setRoundPaused(wasPaused);});picker.show();
+        final MiniGame owner=overlay.game;Dialog[] picker={null};
+        LanguagePanel panel=new LanguagePanel(this,AppLanguage.current(this),target->{picker[0].dismiss();AppLanguage.set(this,target);});
+        picker[0]=CanvasSheet.show(this,3,panel,()->{if(resumed&&overlay.game==owner)setRoundPaused(wasPaused);});
     }
     private void showRecordings(){
         if(encoder!=null){Toast.makeText(this,"Finish recording before opening your clips",Toast.LENGTH_LONG).show();return;}
-        File folder=getExternalFilesDir(Environment.DIRECTORY_MOVIES);File[] clips=folder==null?null:folder.listFiles(f->f.isFile()&&ClipSharing.validName(f.getName()));
-        boolean wasPaused=paused;setRoundPaused(true);
-        if(clips==null||clips.length==0){AlertDialog empty=new AlertDialog.Builder(this).setTitle(AppText.t(MainActivity.this,"My recordings")).setMessage(getString(R.string.fc_no_clips)).setPositiveButton(AppText.t(MainActivity.this,"Done"),null).create();empty.setOnDismissListener(d->{if(resumed)setRoundPaused(wasPaused);});empty.show();return;}
-        java.util.Arrays.sort(clips,(a,b)->Long.compare(b.lastModified(),a.lastModified()));String[] labels=new String[clips.length];
-        java.text.DateFormat date=java.text.DateFormat.getDateTimeInstance(java.text.DateFormat.MEDIUM,java.text.DateFormat.SHORT);
-        for(int i=0;i<clips.length;i++)labels[i]=date.format(new java.util.Date(clips[i].lastModified()))+" - "+String.format(Locale.US,"%.1f MB",clips[i].length()/1048576f);
-        android.widget.ArrayAdapter<String> adapter=new android.widget.ArrayAdapter<>(this,android.R.layout.simple_list_item_1,new java.util.ArrayList<>(java.util.Arrays.asList(labels)));
-        boolean[] selected={false};AlertDialog library=new AlertDialog.Builder(this).setTitle(AppText.t(MainActivity.this,"My recordings - newest first")).setAdapter(adapter,(d,index)->{selected[0]=true;setRoundPaused(wasPaused);showClip(clips[index]);}).setNegativeButton(AppText.t(MainActivity.this,"Close"),null).create();library.setOnDismissListener(d->{if(!selected[0]&&resumed)setRoundPaused(wasPaused);});library.show();
-        new Thread(()->{
-            String[] details=labels.clone();
-            for(int i=0;i<clips.length;i++){long duration=ClipDetails.duration(clips[i]);if(duration>=0)details[i]=labels[i]+" - "+getString(R.string.fc_clip_duration,ClipDetails.time(duration));}
-            ui.post(()->{if(!isFinishing()&&!isDestroyed()&&library.isShowing()){adapter.clear();adapter.addAll(details);adapter.notifyDataSetChanged();}});
-        },"FaceChaosClipDetails").start();
+        File folder=getExternalFilesDir(Environment.DIRECTORY_MOVIES);File[] clips=folder==null?new File[0]:folder.listFiles(f->f.isFile()&&ClipSharing.validName(f.getName()));if(clips==null)clips=new File[0];
+        boolean wasPaused=paused;final MiniGame owner=overlay.game;setRoundPaused(true);
+        if(clips.length==0){CanvasSheet.show(this,2,RecordingsPanel.empty(this),()->{if(resumed&&overlay.game==owner)setRoundPaused(wasPaused);});return;}
+        java.util.Arrays.sort(clips,(a,b)->Long.compare(b.lastModified(),a.lastModified()));Dialog[] library={null};boolean[] selected={false};
+        RecordingsPanel panel=new RecordingsPanel(this,clips,file->{selected[0]=true;library[0].dismiss();if(resumed&&overlay.game==owner){setRoundPaused(wasPaused);showClip(file);}});
+        library[0]=CanvasSheet.show(this,2,panel,()->{panel.close();if(!selected[0]&&resumed&&overlay.game==owner)setRoundPaused(wasPaused);});panel.loadDetails();
     }
     private void showRating(Runnable after){
         if(encoder!=null){Toast.makeText(this,"Finish recording before rating",Toast.LENGTH_LONG).show();return;}
@@ -871,14 +862,15 @@ public final class MainActivity extends Activity {
         LinearLayout body=new LinearLayout(this);body.setOrientation(LinearLayout.VERTICAL);body.setPadding(dp(12),dp(8),dp(12),dp(8));
         VideoView video=new VideoView(this);body.addView(video,new LinearLayout.LayoutParams(-1,dp(320)));
         TextView clipLength=sheetText("",13,0xFF314B50);body.addView(clipLength);
-        body.addView(sheetText("Camera + game - silent video. Saved inside Face Chaos. Save to Gallery copies it to Movies / Face Chaos. Share opens your chosen app; you decide whether to post.",13,0xFF314B50));
+        body.addView(sheetText(getString(R.string.fc_review_note),13,0xFF314B50));
         Button delete=new Button(this);delete.setText(AppText.t(MainActivity.this,"Delete this clip"));body.addView(delete);
-        AlertDialog review=new AlertDialog.Builder(this,android.R.style.Theme_Material_Light_Dialog_Alert).setTitle(AppText.t(MainActivity.this,"Review your clip")).setView(body)
-            .setPositiveButton(AppText.t(MainActivity.this,"Save to Gallery"),(dialog,which)->saveClip(clip))
-            .setNeutralButton(AppText.t(MainActivity.this,"Share"),(dialog,which)->shareClip(clip)).setNegativeButton(AppText.t(MainActivity.this,"Close"),null).create();
+        LinearLayout actions=new LinearLayout(this);body.addView(actions,new LinearLayout.LayoutParams(-1,-2));
+        Button save=new Button(this);save.setText(R.string.fc_save_gallery);save.setAllCaps(false);save.setMinHeight(dp(52));save.setTextColor(0xFF173E42);save.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0xFFF4D452));actions.addView(save,new LinearLayout.LayoutParams(0,-2,1));
+        Button share=new Button(this);share.setText(R.string.fc_share);share.setAllCaps(false);share.setMinHeight(dp(52));share.setTextColor(0xFF173E42);share.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0xFFD9EBE2));actions.addView(share,new LinearLayout.LayoutParams(0,-2,1));
+        final MiniGame owner=overlay.game;Dialog review=CanvasSheet.show(this,4,body,()->{video.stopPlayback();if(resumed&&overlay.game==owner)setRoundPaused(wasPaused);});
+        save.setOnClickListener(v->saveClip(clip));share.setOnClickListener(v->{review.dismiss();shareClip(clip);});
         delete.setOnClickListener(v->new AlertDialog.Builder(this).setTitle(AppText.t(MainActivity.this,"Delete this local clip?")).setMessage("A copy already saved to your gallery will remain.")
             .setPositiveButton(AppText.t(MainActivity.this,"Delete"),(d,w)->{if(clip.delete()){if(clip.equals(lastClip)){lastClip=null;getPreferences(0).edit().remove("last_clip").apply();}review.dismiss();updateCaptureControls();}}).setNegativeButton(AppText.t(MainActivity.this,"Keep"),null).show());
-        review.setOnDismissListener(dialog->{video.stopPlayback();if(resumed)setRoundPaused(wasPaused);});review.show();
         MediaController media=new MediaController(this);media.setAnchorView(video);video.setMediaController(media);video.setVideoURI(Uri.fromFile(clip));video.setOnPreparedListener(player->{clipLength.setText(getString(R.string.fc_clip_duration,ClipDetails.time(player.getDuration())));video.start();});
     }
     private void shareClip(File file){

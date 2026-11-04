@@ -1,4 +1,11 @@
 {
+ "language_home_note":["Choose your language, then tap Apply. Device language follows your phone settings.","اختر لغتك ثم اضغط تطبيق. لغة الجهاز تتبع إعدادات هاتفك.","Choisissez une langue, puis touchez Appliquer. La langue de l’appareil suit les réglages du téléphone.","Elige un idioma y pulsa Aplicar. El idioma del dispositivo sigue los ajustes del teléfono.","Escolha um idioma e toque em Aplicar. O idioma do dispositivo segue as configurações do telefone."],
+ "library_subtitle":["Your best moments, ready to replay","أفضل لحظاتك، جاهزة للمشاهدة","Vos meilleurs moments à revoir","Tus mejores momentos para volver a ver","Seus melhores momentos para rever"],
+ "language_subtitle":["Play in your own words","العب بلغتك","Jouez dans votre langue","Juega en tu idioma","Jogue no seu idioma"],
+ "language_apply":["Apply language","تطبيق اللغة","Appliquer la langue","Aplicar idioma","Aplicar idioma"],
+ "library_empty_title":["Your first clip starts here","مقطعك الأول يبدأ هنا","Votre première vidéo commence ici","Tu primer vídeo empieza aquí","Seu primeiro vídeo começa aqui"],
+ "library_recording":["Recording %1$d","تسجيل %1$d","Vidéo %1$d","Grabación %1$d","Gravação %1$d"],
+ "library_open":["Play recording","تشغيل التسجيل","Lire la vidéo","Reproducir grabación","Reproduzir gravação"],
  "language":["Language","اللغة","Langue","Idioma","Idioma"],
  "privacy":["Privacy policy","سياسة الخصوصية","Politique de confidentialité","Política de privacidad","Política de privacidade"],
  "privacy_sub":["How your camera, voice and clips are used","كيف تُستخدم الكاميرا والصوت والمقاطع","Comment sont utilisés caméra, voix et vidéos","Cómo se usan la cámara, la voz y los vídeos","Como a câmera, a voz e os vídeos são usados"],

@@ -4,6 +4,13 @@ import android.content.Context;
 final class AppText {
  static boolean english(Context c){return c.getResources().getConfiguration().getLocales().get(0).getLanguage().equals("en");}
  static String t(Context c,String source){switch(source){
+  case "Choose your language, then tap Apply. Device language follows your phone settings.":return c.getString(R.string.fc_language_home_note);
+  case "Your best moments, ready to replay":return c.getString(R.string.fc_library_subtitle);
+  case "Play in your own words":return c.getString(R.string.fc_language_subtitle);
+  case "Apply language":return c.getString(R.string.fc_language_apply);
+  case "Your first clip starts here":return c.getString(R.string.fc_library_empty_title);
+  case "Recording %1$d":return c.getString(R.string.fc_library_recording);
+  case "Play recording":return c.getString(R.string.fc_library_open);
   case "Language":return c.getString(R.string.fc_language);
   case "Privacy policy":return c.getString(R.string.fc_privacy);
   case "How your camera, voice and clips are used":return c.getString(R.string.fc_privacy_sub);
