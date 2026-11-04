@@ -19,7 +19,7 @@ public final class VoiceCourseCheck {
     }
     require(g.won&&g.coins>=g.voiceTarget(),"PCM-driven course playable at stage "+stage+" sample offset "+offset+" score "+g.score);
    }
-   MiniGame collision=new MiniGame(3,0,stage);collision.countdown=0;collision.phase=collision.voiceApproach()-.01f;collision.height=collision.corridor()>.5f?.08f:.92f;collision.step(.02f);require(collision.resolved&&!collision.earnedCoin&&collision.coins==0&&collision.hearts==(stage==5?0:2),"Wrong side collides with actual obstacle");
+   MiniGame collision=new MiniGame(3,0,stage);collision.countdown=0;collision.phase=collision.voiceApproach()-.01f;collision.height=collision.corridor()>.5f?.08f:.92f;collision.step(.02f);require(collision.resolved&&!collision.earnedCoin&&collision.coins==0&&collision.hearts==0&&collision.finished&&!collision.won,"Wrong side collides with actual obstacle");
   }
   require(VoiceCourse.target(2,0,1)>.6f&&VoiceCourse.target(2,1,1)<.4f,"Vines demand low flight; thorns demand high flight");
   require(VoiceCourse.target(3,0,1)!=VoiceCourse.target(3,0,2),"Pistons move the safe gap");

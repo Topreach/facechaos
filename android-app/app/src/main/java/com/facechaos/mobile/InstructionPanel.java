@@ -48,6 +48,7 @@ final class InstructionPanel {
   if(g.faceBlocked())return g.mode==13?"Centre your head to calibrate":"Move your face into view";
   if(g.microphoneMode&&!g.micReady&&MiniGame.supportsMicrophone(g.mode))return "Calibrating - stay quiet";
   if(g.countdown>0)return "Ready in "+(int)Math.ceil(g.countdown);
+  if(g.missNotice>0)return context.getString(R.string.fc_life_lost,g.hearts);
   if(g.earnedCoin&&g.flash>0)return "Good job! +1 coin";
   if(g.resolved&&(g.mode==1||g.mode==3||g.mode==4||g.mode==6||g.mode==7||g.mode==8||g.mode==9||g.mode==11))return g.feedback;
   if(g.mode==14)return g.quizListening?"Listening - say the country":"Name the country / tap to answer";

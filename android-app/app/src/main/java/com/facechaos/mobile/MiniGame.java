@@ -95,11 +95,12 @@ final class MiniGame {
  int gateState;
  boolean gateMatched;
  float gateAnimation;
- String feedback="Get ready";
+ String feedback="Get ready",failureReason="";
+ float missNotice;
  MiniGame(int mode){this(mode,0);}
  MiniGame(int mode,int seed){this(mode,seed,1);}
- MiniGame(int mode,int seed,int stage){this.mode=mode;microphoneMode=requiresMicrophone(mode);this.stage=Math.max(1,Math.min(STAGE_COUNT,stage));hearts=this.stage==5?1:3;memoryRandom=new java.util.Random(seed);makeMemorySequence();racing=mode==12||mode==13?new RacingGame(mode,this.stage,seed):null;flags=mode==14?new FlagQuiz(seed,this.stage):null;}
- int goal(){return mode==14?4+stage:mode==12?100:mode==13?racing.trafficRequired():mode==9?(stage==5?AnimalPatterns.cues(stage):AnimalPatterns.cues(stage)-1):mode==11?extrasTarget():mode==10?3:mode==6?(stage==5?6:5):mode==7?(stage==5?8:stage>=3?7:6):mode==8?(stage==5?6:stage>=3?5:4):mode==2?12:mode==1||mode==3||mode==4?8:mode==0?5+stage:6;}
+ MiniGame(int mode,int seed,int stage){this.mode=mode;microphoneMode=requiresMicrophone(mode);this.stage=Math.max(1,Math.min(STAGE_COUNT,stage));hearts=GamePolicy.lives(mode,this.stage);memoryRandom=new java.util.Random(seed);makeMemorySequence();racing=mode==12||mode==13?new RacingGame(mode,this.stage,seed):null;flags=mode==14?new FlagQuiz(seed,this.stage):null;}
+ int goal(){return mode==14?4+stage:mode==12?100:mode==13?racing.trafficRequired():mode==9?(stage==5?AnimalPatterns.cues(stage):AnimalPatterns.cues(stage)-1):mode==11?extrasTarget():mode==10?3:mode==6?(stage==5?6:5):mode==7?8:mode==8?6:mode==2?12:mode==1||mode==3||mode==4?8:mode==0?5+stage:6;}
  int target(){if(mode==9)return AnimalPatterns.at(stage,encounter);if(mode==10)return memoryAt(memoryIndex);if(mode==0)return GameSections.faceAt(stage,score);if(mode==1)return encounter%3;if(mode==2||mode==5)return score%2;return 0;}
  String[] controls(){switch(mode){
  case 14:return new String[]{"Say or type country"};
@@ -152,11 +153,12 @@ final class MiniGame {
   if(mode==5)return "Turn "+Math.min(6,score+1)+" of 6 - "+(target()==0?"Face cue":"Sound cue");
   return "Gate "+Math.min(6,score+1)+" of 6 - return to neutral after matching";
  }
- void acceptSoundLevel(float level,float strength,boolean active,boolean ready){boolean justReady=!micReady&&ready;soundStrength=strength;micLevel=mode==11?strength:level;micReady=ready;if(mode==9&&justReady&&!active&&!resolved){soundArmed=true;soundQuiet=0;}voiceSignal(active,ready);}
+ void acceptSoundLevel(float level,float strength,boolean active,boolean ready){if(finished)return;boolean justReady=!micReady&&ready;soundStrength=strength;micLevel=mode==11?strength:level;micReady=ready;if(mode==9&&justReady&&!active&&!resolved){soundArmed=true;soundQuiet=0;}voiceSignal(active,ready);}
  float glowFlightProgress(){return Math.max(0,Math.min(1,glowProgress/glowRequired()));}
  float glowFlightX(){float start=encounter==0?195:65+((encounter-1)%3)*130,target=65+(encounter%3)*130;return start+(target-start)*glowFlightProgress();}
  float glowFlightY(float ground){float start=encounter==0?ground-45:ground-((encounter-1)<3?100:0)-15,target=ground-(encounter<3?100:0)-15,t=glowFlightProgress();return start+(target-start)*t-(float)Math.sin(t*Math.PI)*24;}
  void voiceSignal(boolean active,boolean ready){
+  if(finished)return;
   if(soundJump()){
    voiceActive=active&&ready;
    if(paused||finished||countdown>0||resolved){jumpSampling=false;jumpArmed=false;return;}
@@ -200,7 +202,7 @@ final class MiniGame {
    if(mode==6){
     if(phase<snackWindowOpens()||phase>snackWindowCloses()){feedback="Wait for the treat window";return;}
     resolved=true;flash=.7f;
-    if(snackIsTreat()){score++;awardCoin();}else{earnedCoin=false;miss("Pepper! Keep your mouth closed");}return;
+    if(snackIsTreat()){score++;awardCoin();}else{earnedCoin=false;crash("Pepper eaten");}return;
    }
    if(mode==7){
     if(phase<.5f){feedback="Wait for the moving block";return;}
@@ -222,7 +224,7 @@ final class MiniGame {
  }
  void step(float delta){
   if(requiresMicrophone(mode)&&!microphoneMode||mode==9&&animalDemoPlaying||paused||finished||faceBlocked()||(mode==12||mode==3||mode==4||mode==8||mode==9||mode==11)&&microphoneMode&&!micReady||delta<=0||!Float.isFinite(delta))return;
-  float realDt=Math.min(delta,.05f),dt=realDt*pace();flash=Math.max(0,flash-dt);
+  float realDt=Math.min(delta,.05f),dt=realDt*pace();missNotice=Math.max(0,missNotice-realDt);flash=Math.max(0,flash-dt);
   if(mode==13&&headGrace>0){headGrace=Math.max(0,headGrace-realDt);racing.steer(dt,headLane);return;}
   if(countdown>0){countdown=Math.max(0,countdown-realDt);if(countdown==0){feedback="Your turn!";if(mode==9&&!voiceActive&&(!microphoneMode||micReady))soundArmed=true;}return;}
   elapsed+=dt;phase+=dt;if(touchHolding)touchHoldTime+=realDt;
@@ -232,10 +234,12 @@ final class MiniGame {
    if(!resolved&&phase>=2.65f){
     resolved=true;flash=.7f;
     if(jumpHeight>=jumpRequired()&&(mode!=4||jumpHeight<=jumpRequired()+MelodyCourse.ceilingMargin(stage,encounter))){score++;awardCoin();if(mode==4){jumpHeight=jumpRequired();jumpVelocity=0;}}
+    else if(mode==4&&jumpHeight>jumpRequired()+MelodyCourse.ceilingMargin(stage,encounter)){earnedCoin=false;melodyImpact=true;crash("Hit the overhang");}
     else if(mode==4){earnedCoin=false;melodyFalling=true;melodyImpact=false;melodyOutcomeTime=0;melodyMissHeight=jumpHeight;feedback=jumpHeight>jumpRequired()?"Too much power - hit the overhang!":jumpUsed?"Too low - falling into the fire!":"No jump - falling into the fire!";}
-    else miss(jumpUsed?"Jump too low or mistimed":"Make a sound for the next jump");
+    else crash(jumpUsed?"Jump too low or mistimed":"No jump before the obstacle");
    }
   }
+  if(finished)return;
   if(mode==14){
    if(quizProcessing){phase-=dt;return;}
    if(resolved){flightTime+=dt;if(flightTime>=1.2f){encounter++;phase=0;resolved=false;earnedCoin=false;quizStatus="Say the country name, or tap to type";}}
@@ -247,13 +251,13 @@ final class MiniGame {
    racing.step(dt,throttle,headLane);
    score=mode==12?Math.min(100,(int)(racing.playerDistance/RacingGame.FINISH*100)):racing.dodged;encounter=racing.rows;
    if(racing.coins>oldCoins){int reward=racing.coins-oldCoins;coins+=reward;coinBalance+=reward;earnedCoin=true;flash=.7f;feedback="Good job! +"+reward+" coin";}
-   if(racing.crashes>oldCrashes){earnedCoin=false;flash=.8f;miss("Traffic hit - watch the clear lane");}
+   if(racing.crashes>oldCrashes){earnedCoin=false;flash=.8f;crash("Traffic collision");}
    if(!finished&&racing.result!=0){if(mode==12&&racing.result>0)score=100;finish(racing.result>0);}return;
   }
   if(mode>=9){stepExtras(dt,realDt);return;}
   if(mode>=6){stepCollection(dt,realDt);return;}
   if(mode==0){
-   if(gateState==0&&phase>=gateApproach()){gateState=gateMatched?1:2;gateAnimation=0;feedback=gateMatched?"Through the gate!":"Try the next gate";if(!gateMatched)hearts--;}
+   if(gateState==0&&phase>=gateApproach()){gateState=gateMatched?1:2;gateAnimation=0;feedback=gateMatched?"Through the gate!":"Try the next gate";if(!gateMatched)crash("Gate reached before matching its expression");}
    else if(gateState!=0){
     gateAnimation+=dt;
     if(gateAnimation>=.95f){
@@ -272,17 +276,19 @@ final class MiniGame {
    if(phase>=voiceApproach()&&!resolved){
     resolved=true;earnedCoin=Math.abs(height-corridor())<=voiceTolerance();
     if(earnedCoin){score++;coins++;coinBalance++;feedback="Good job! +1 coin";flash=.9f;}
-    else miss("Hit "+VoiceCourse.obstacleName(stage,encounter).toLowerCase(java.util.Locale.ROOT)+" - try the next gap");
+    else crash("Hit "+VoiceCourse.obstacleName(stage,encounter).toLowerCase(java.util.Locale.ROOT));
    }
+   if(finished)return;
    if(phase>=voiceApproach()+.9f){encounter++;phase=0;resolved=false;earnedCoin=false;if(encounter>=8)finish(score>=voiceTarget()&&hearts>0);}
   }else if(mode==4){
    if(resolved){
     melodyOutcomeTime+=realDt;
-    if(melodyFalling&&!melodyImpact&&melodyOutcomeTime>=.55f){melodyImpact=true;flash=.9f;miss("Fell into the fire - one life lost");}
+    if(melodyFalling&&!melodyImpact&&melodyOutcomeTime>=.55f){melodyImpact=true;flash=.9f;crash("Fell into the fire");}
     if(!finished&&melodyOutcomeTime>=1.05f){phase=0;encounter++;resolved=false;earnedCoin=false;jumpUsed=false;jumpHeight=0;jumpVelocity=0;jumpSampling=false;jumpArmed=false;melodyFalling=false;melodyImpact=false;melodyOutcomeTime=0;melodyMissHeight=0;if(encounter>=8)finish(score>=timedTarget()&&hearts>0);}
    }
   }else if(mode==1){
-   if(phase>=3.15f&&!resolved){resolved=true;miss("Next one is yours!");}
+   if(phase>=escapeContact()&&!resolved){resolved=true;crash(target()==1?"Projectile hit before shielding":"Obstacle reached before attacking");}
+   if(finished)return;
    if(phase>=3.8f){phase=0;encounter++;resolved=false;earnedCoin=false;jumpUsed=false;jumpHeight=0;jumpVelocity=0;jumpSampling=false;jumpArmed=false;if(encounter>=8)finish(score>=timedTarget()&&hearts>0);}
   }else if(phase>=cueTimeout()){phase=0;miss("Take a breath. Try again.");}
   if(elapsed>=(mode==0?65+(stage-1)*8:mode==2?60:48))finish(score>=goal());
@@ -359,29 +365,31 @@ final class MiniGame {
  private void stepCollection(float dt,float realDt){
   if(mode==6){
    if(phase>=2.55f&&!resolved){resolved=true;flash=.7f;earnedCoin=false;if(snackIsTreat())miss("Treat missed - catch the next one");else feedback="Good job! Pepper avoided";}
+   if(finished)return;
    if(phase>=3.2f){encounter++;phase=0;resolved=false;earnedCoin=false;if(encounter>=9)finish(score>=goal()&&hearts>0);}
   }else if(mode==7){
-   if(!resolved&&phase>=3){resolved=true;flightTime=0;stackDropping=false;stackLanded=true;earnedCoin=false;miss("Block missed - smile at the gold line");}
+   if(!resolved&&phase>=3){resolved=true;flightTime=0;stackDropping=false;stackLanded=true;earnedCoin=false;crash("Block fell before placement");}
    if(resolved){
     flightTime+=realDt;
-    if(stackDropping&&!stackLanded&&flightTime>=.38f){stackLanded=true;flash=.9f;if(stackGood){stackOffsets[score]=stackDropOffset;score++;awardCoin();}else miss("Off centre - watch the gold line");}
+    if(stackDropping&&!stackLanded&&flightTime>=.38f){stackLanded=true;flash=.9f;if(stackGood){stackOffsets[score]=stackDropOffset;score++;awardCoin();}else crash("Tower collapsed: block landed off centre");}
     if(!finished&&flightTime>=1.05f){encounter++;phase=0;flightTime=0;resolved=false;earnedCoin=false;stackDropping=false;stackLanded=false;if(encounter>=8)finish(score>=goal()&&hearts>0);}
    }
   }else{
    if(!resolved){
     if(voiceActive){charge=Math.min(1,charge+.28f*dt);wasCharging=true;launchQuietTime=0;}
     else if(wasCharging){launchQuietTime+=realDt;if(!microphoneMode||launchQuietTime>=.10f)launchComet();}
-    if(phase>=8&&!resolved){resolved=true;cometLanded=true;earnedCoin=false;flightTime=1.1f;launchPower=charge;miss("Launch window missed - charge and release in gold");}
+    if(phase>=8&&!resolved){resolved=true;cometLanded=true;earnedCoin=false;flightTime=1.1f;launchPower=charge;crash("Launch window missed");}
    }else{
     flightTime+=dt;
-    if(!cometLanded&&flightTime>=1.1f){cometLanded=true;flash=1;if(cometHitsTarget()){score++;awardCoin();}else miss(launchPower<powerTarget()?"Too little power - rocket fell short":"Too much power - rocket flew past");}
+    if(!cometLanded&&flightTime>=1.1f){cometLanded=true;flash=1;if(cometHitsTarget()){score++;awardCoin();}else crash(launchPower<powerTarget()?"Rocket fell short of the landing":"Rocket overshot the landing");}
     if(!finished&&flightTime>=1.7f){encounter++;phase=0;charge=0;launchPower=0;launchQuietTime=0;flightTime=0;wasCharging=false;cometLanded=false;cometLaunched=false;resolved=false;earnedCoin=false;if(encounter>=6)finish(score>=goal()&&hearts>0);}
    }
   }
   if(mode!=9&&elapsed>=80)finish(false);
  }
+ float escapeContact(){return 2.65f;}
   float windowOpens(){return soundJump()?(microphoneMode?2.05f+(stage-1)*.0125f-.15f*(pace()-1):highJump()?2.05f+(stage-1)*.02f:2.15f+(stage-1)*.01f):(mode==1?1:1.2f)+(stage-1)*.06f;}
- float windowCloses(){return soundJump()?(microphoneMode?2.30f-(stage-1)*.01f-.15f*(pace()-1):2.45f-(stage-1)*.02f):(mode==1?3:2.8f)-(stage-1)*.06f;}
+ float windowCloses(){return soundJump()?(microphoneMode?2.30f-(stage-1)*.01f-.15f*(pace()-1):2.45f-(stage-1)*.02f):Math.min(mode==1?escapeContact():Float.POSITIVE_INFINITY,(mode==1?3:2.8f)-(stage-1)*.06f);}
  float cueTimeout(){return mode==2?9-(stage-1)*1.4f:mode==9?9-(stage-1)*.6f:7-(stage-1)*.65f;}
  float stackSpeed(){return 1.8f+(stage-1)*.1f;}
  float gateApproach(){return 5.5f-(stage-1)*.6f;}
@@ -393,8 +401,8 @@ final class MiniGame {
  float stackTolerance(){return .3f-(stage-1)*.025f;}
  float powerTolerance(){return .12f-(stage-1)*.01f;}
  float voiceTolerance(){return .25f-(stage-1)*.02f;}
- int timedTarget(){return stage==5?8:stage>=3?7:6;}
- int voiceTarget(){return stage==5?8:stage>=3?6:5;}
+ int timedTarget(){return 8;}
+ int voiceTarget(){return 8;}
  float glowRequired(){return 1.5f+(stage-1)*.15f;}
  float pace(){return paceAtStage(stage);}
  static float paceAtStage(int stage){switch(stage){case 2:return 1.25f;case 3:return 1.5f;case 4:return 1.8f;case 5:return 2.1f;default:return 1;}}
@@ -407,6 +415,7 @@ final class MiniGame {
  void stopRound(){if(!finished){finished=true;won=false;stopped=true;feedback="Round stopped";}}
  String resultTitle(){return stopped?"Round stopped":won?(stage<STAGE_COUNT?"Stage "+stage+" complete!":"All stages complete!"):"Mission failed";}
  String resultAction(){return won?(stage<STAGE_COUNT?"Next stage":"Play again"):stopped?"Play again":"Try again";}
- private void miss(String message){hearts--;feedback=message;if(hearts<=0)finish(false);}
- private void finish(boolean success){finished=true;won=success;feedback=success?"Mission complete":"Mission failed";}
+ private void miss(String message){if(finished)return;hearts=Math.max(0,hearts-1);earnedCoin=false;feedback=message;failureReason=message;missNotice=1.1f;if(hearts<=0||!GamePolicy.attainable(this))finish(false);}
+ private void crash(String message){if(finished)return;hearts=0;failureReason=message;earnedCoin=false;finish(false);}
+ private void finish(boolean success){if(finished)return;finished=true;won=success;touchHolding=false;voiceActive=false;jumpSampling=false;jumpArmed=false;feedback=success?"Mission complete":"Mission failed";}
 }

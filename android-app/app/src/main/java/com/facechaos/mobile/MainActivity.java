@@ -465,13 +465,13 @@ public final class MainActivity extends Activity {
         check.getWindow().setBackgroundDrawableResource(android.R.color.transparent);check.getWindow().setGravity(Gravity.BOTTOM);check.getWindow().setDimAmount(0);check.getWindow().setLayout(-1,Math.round(getResources().getDisplayMetrics().heightPixels*.32f));startFaceRecognition();
     }
     private void startFaceRecognition(){
-        if(faceRecognition!=null||!resumed)return;
+        if(faceRecognition!=null||!resumed||!faceLab&&overlay.game.finished)return;
         if(checkSelfPermission(Manifest.permission.CAMERA)!=PackageManager.PERMISSION_GRANTED){if(faceCheckText!=null)faceCheckText.setText(AppText.t(MainActivity.this,"Enable the camera to test facial controls. Touch play remains available."));overlay.game.faceMode=false;return;}
         final int generation=++faceGeneration;lastFaceResult=SystemClock.uptimeMillis();overlay.game.faceReady=false;overlay.game.faceStatus="Relax your face to calibrate";
         faceRecognition=new FaceRecognition(this,new FaceRecognition.Listener(){
-            public void bounds(float left,float top,float right,float bottom){ui.post(()->{if(generation==faceGeneration&&resumed)overlay.setFaceBottom(bottom);});}
+            public void bounds(float left,float top,float right,float bottom){ui.post(()->{if(generation==faceGeneration&&resumed&&(faceLab||!overlay.game.finished))overlay.setFaceBottom(bottom);});}
             public void result(boolean ready,String state,int action,String measurements){ui.post(()->{
-                if(generation!=faceGeneration||!resumed)return;lastFaceResult=SystemClock.uptimeMillis();if(overlay.game.mode==13)return;
+                if(generation!=faceGeneration||!resumed||!faceLab&&overlay.game.finished)return;lastFaceResult=SystemClock.uptimeMillis();if(overlay.game.mode==13)return;
                 if(faceLab&&action>=0&&action<faceTrialCounts.length)faceTrialCounts[action]++;
                 if(faceCheckText!=null)faceCheckText.setText(state+"\nMouth "+faceTrialCounts[0]+"   Smile "+faceTrialCounts[1]+"   Teeth "+faceTrialCounts[2]+"   Blink "+faceTrialCounts[3]+"\nWide eyes "+faceTrialCounts[4]+"   Face squeeze "+faceTrialCounts[5]+"\n"+measurements);
                 if(faceLab||overlay.game.mode==13)return;
@@ -480,13 +480,13 @@ public final class MainActivity extends Activity {
                 if(action>=0)FaceGameInput.send(overlay.game,action);overlay.invalidate();
             });}
             public void head(boolean ready,int lane,float offset,String state){ui.post(()->{
-                if(generation!=faceGeneration||!resumed||overlay.game.mode!=13)return;
+                if(generation!=faceGeneration||!resumed||overlay.game.mode!=13||!faceLab&&overlay.game.finished)return;
                 lastFaceResult=SystemClock.uptimeMillis();int direction=reverseHead?-lane:lane;
                 if(faceLab){if(faceCheckText!=null)faceCheckText.setText(state+String.format(java.util.Locale.US,"\nHead offset %.2f - %s",offset,direction<0?"LEFT":direction>0?"RIGHT":"MIDDLE"));return;}
                 if(!camera.hasFreshAnalysisFrame())readyHeadLost();
                 else{if(ready&&!overlay.game.faceReady&&overlay.game.countdown<=0)overlay.game.headGrace=.6f;overlay.game.faceReady=ready;overlay.game.headLane=direction;overlay.game.faceStatus=ready?(direction<0?"Steering LEFT":direction>0?"Steering RIGHT":"Steering MIDDLE"):state;overlay.invalidate();}
             });}
-            public void failed(){ui.post(()->{if(generation!=faceGeneration)return;stopFaceRecognition();overlay.game.faceMode=false;overlay.game.faceReady=false;setRoundPaused(true);if(faceCheckText!=null)faceCheckText.setText(AppText.t(MainActivity.this,"Face detector unavailable. Touch controls remain available."));Toast.makeText(MainActivity.this,"Face detector unavailable - resume for touch controls",Toast.LENGTH_LONG).show();});}
+            public void failed(){ui.post(()->{if(generation!=faceGeneration||!faceLab&&overlay.game.finished)return;stopFaceRecognition();overlay.game.faceMode=false;overlay.game.faceReady=false;setRoundPaused(true);if(faceCheckText!=null)faceCheckText.setText(AppText.t(MainActivity.this,"Face detector unavailable. Touch controls remain available."));Toast.makeText(MainActivity.this,"Face detector unavailable - resume for touch controls",Toast.LENGTH_LONG).show();});}
         },overlay.game.mode==13);faceRecognition.sensitivity=faceSensitivity;ui.removeCallbacks(faceFrame);ui.post(faceFrame);
     }
     private void readyHeadLost(){overlay.game.faceReady=false;overlay.game.faceStatus="Head camera interrupted - reconnect or use touch";overlay.invalidate();}
@@ -576,6 +576,7 @@ public final class MainActivity extends Activity {
         ScrollView scroll=new ScrollView(this);scroll.setFillViewport(false);
         LinearLayout body=new LinearLayout(this);body.setOrientation(LinearLayout.VERTICAL);
         body.addView(new TutorialArt(this,entry.id,-1,stageGame.stage),new LinearLayout.LayoutParams(-1,dp(160)));
+        body.addView(sheetText(GameLanguage.policy(this,stageGame),15,0xFF82544C));
         body.addView(sheetText(stageRules+(AppText.english(this)?" Progress saves after each completed stage.":""),14,0xFF52736B));
         if(AppText.english(this)&&GameSections.applies(entry.id)){body.addView(sheetText(GameSections.at(entry.id,stageGame.stage).brief,16,0xFF476B64));StringBuilder route=new StringBuilder("Your five sections\n");for(int section=1;section<=5;section++)route.append(section==stageGame.stage?"? ":"").append(section).append(". ").append(GameSections.at(entry.id,section).name).append(section==5?"":"\n");body.addView(sheetText(route.toString(),14,0xFF6B5682));}
         if(AppText.english(this)){
@@ -930,7 +931,7 @@ public final class MainActivity extends Activity {
                 if(generation!=micGeneration||!resumed||paused||!gameVisible()||!MiniGame.supportsMicrophone(overlay.game.mode)||overlay.game.finished)return;
                 overlay.game.acceptSoundLevel(level,strength,active,ready);overlay.invalidate();
             });}
-            public void failed(){ui.post(()->{if(generation!=micGeneration)return;if(overlay.game.mode==3||overlay.game.mode==4||overlay.game.mode==4||overlay.game.mode==12||overlay.game.mode==11||overlay.game.mode==9||overlay.game.mode==8){showSoundFailure();return;}applyInputMode(false,paused);Toast.makeText(MainActivity.this,"Microphone unavailable - switched to touch controls",Toast.LENGTH_LONG).show();});}
+            public void failed(){ui.post(()->{if(generation!=micGeneration||overlay.game.finished)return;if(overlay.game.mode==3||overlay.game.mode==4||overlay.game.mode==4||overlay.game.mode==12||overlay.game.mode==11||overlay.game.mode==9||overlay.game.mode==8){showSoundFailure();return;}applyInputMode(false,paused);Toast.makeText(MainActivity.this,"Microphone unavailable - switched to touch controls",Toast.LENGTH_LONG).show();});}
         },overlay.game.mode==9||overlay.game.mode==8);microphone.start();
     }
     private void stopMicrophone(){

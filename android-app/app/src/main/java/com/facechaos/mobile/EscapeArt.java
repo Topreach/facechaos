@@ -46,7 +46,7 @@ final class EscapeArt {
         for(int i=0;i<11;i++){paint.setColor(i%2==0?0xFFE9AA73:0xFFF7D09A);c.drawCircle(28+i*33,ground+22,3,paint);}
         boolean action=game.resolved&&game.flash>0;
         float bounce=game.jumpHeight;
-        float obstacle=344-Math.min(1,game.phase/2.65f)*248;
+        float obstacle=344-Math.min(1,game.phase/game.escapeContact())*248;
         if(!game.resolved||game.flash<=0){
             if(!game.resolved){if(game.target()==0)sections.hurdle(c,game,obstacle,ground+7,game.highJump()?92:69);else if(game.target()==1)sections.projectile(c,game,obstacle,ground-50);else sprite(c,5,obstacle,ground+7,75);}
         }

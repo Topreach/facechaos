@@ -65,7 +65,7 @@ public final class MiniGameCheck {
         for(int i=0;i<40;i++){escape.step(.02f);escape.input(0);}require(escape.coins==1,"Repeated input cannot duplicate reward");
         while(escape.encounter==0)escape.step(.02f);
         require(!escape.earnedCoin&&escape.prompt().equals("Smile with lips closed"),"Next encounter advances popup and clears reward");
-        while(escape.phase<3.3f)escape.step(.02f);require(!escape.earnedCoin&&escape.coins==1&&escape.coinBalance==21,"Miss does not award coins or show success");
+        while(escape.phase<3.3f&&!escape.finished)escape.step(.02f);require(!escape.earnedCoin&&escape.coins==1&&escape.coinBalance==21,"Miss does not award coins or show success");
         MiniGame stopped=new MiniGame(0);ready(stopped);stopped.stopRound();
         require(stopped.stopped&&stopped.resultTitle().equals("Round stopped"),"Manual stop is distinct from failure");
         stopped.input(0);require(!stopped.gateMatched,"Stopped round rejects input");

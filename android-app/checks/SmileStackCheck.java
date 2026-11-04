@@ -17,7 +17,7 @@ public final class SmileStackCheck {
   require(g.resolved&&g.coins==0,"Smile starts drop, no early coin");g.input(0);g.paused=true;g.step(.05f);require(g.flightTime==0,"Pause freezes drop");g.paused=false;
   for(int i=0;i<20;i++)g.step(.02f);require(g.coins==1&&g.score==1&&g.stackOffsets[0]==offset,"Landing preserves exact horizontal position");
   for(int i=0;i<20;i++){g.input(0);g.step(.02f);}require(g.coins==1,"Held input cannot duplicate reward");
-  MiniGame miss=new MiniGame(7);miss.countdown=0;miss.phase=.7f;miss.input(0);for(int i=0;i<20;i++)miss.step(.02f);require(miss.hearts==2&&miss.coins==0,"Off-centre landing costs one life");
+  MiniGame miss=new MiniGame(7);miss.countdown=0;miss.phase=.7f;miss.input(0);for(int i=0;i<20;i++)miss.step(.02f);require(miss.hearts==0&&miss.finished&&!miss.won&&miss.coins==0,"Off-centre landing costs one life");
   System.out.println("PASS: five full smile-detector cadence stages, exact landing positions, delayed coins, pause and misses");
  }
 }

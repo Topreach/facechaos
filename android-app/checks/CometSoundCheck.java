@@ -22,7 +22,7 @@ public final class CometSoundCheck {
    }
    require(g.won&&g.coins==6,"Six PCM-controlled landings win stage "+stage);
    for(float power:new float[]{.05f,.98f}){
-    MiniGame miss=new MiniGame(8,0,stage);miss.countdown=0;miss.micReady=true;miss.charge=power;miss.wasCharging=true;for(int i=0;i<12;i++)miss.step(.01f);require(miss.resolved&&miss.coins==0&&miss.hearts==(stage==5?1:3),"Miss is not judged at release");land(miss);require(miss.coins==0&&miss.hearts==(stage==5?0:2),"Bad power loses one life at landing");require(miss.cometFlightX()>=70&&miss.cometFlightX()<=354,"Miss trajectory remains visible");
+    MiniGame miss=new MiniGame(8,0,stage);miss.countdown=0;miss.micReady=true;miss.charge=power;miss.wasCharging=true;for(int i=0;i<12;i++)miss.step(.01f);require(miss.resolved&&miss.coins==0&&miss.hearts==1,"Miss is not judged at release");land(miss);require(miss.coins==0&&miss.hearts==0&&miss.finished&&!miss.won,"Bad power loses one life at landing");require(miss.cometFlightX()>=70&&miss.cometFlightX()<=354,"Miss trajectory remains visible");
    }
   }
   MiniGame dropout=new MiniGame(8);dropout.countdown=0;dropout.microphoneMode=true;dropout.micReady=true;dropout.charge=.25f;dropout.wasCharging=true;dropout.voiceSignal(false,true);for(int i=0;i<4;i++)dropout.step(.01f);require(!dropout.resolved,"Brief microphone dropout cannot trigger a launch");dropout.voiceSignal(true,true);dropout.step(.01f);require(dropout.launchQuietTime==0,"Resumed hum cancels the short dropout");

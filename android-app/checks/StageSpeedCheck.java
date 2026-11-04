@@ -24,7 +24,7 @@ public final class StageSpeedCheck {
     require(seconds<previous,"Actual gate/obstacle/traffic/flag deadline must arrive earlier at every stage, mode "+mode+" stage "+stage);previous=seconds;
    }
   }
-  for(int mode=0;mode<GameCatalog.ALL.length;mode++){require(new MiniGame(mode,0,1).hearts==3,"Learning stage has three lives");require(new MiniGame(mode,0,5).hearts==1,"Final stage has one life in every game");}
+  for(int mode=0;mode<GameCatalog.ALL.length;mode++){require(new MiniGame(mode,0,1).hearts==GamePolicy.lives(mode,1),"Lives match each game policy");require(new MiniGame(mode,0,5).hearts==1,"Final stage has one life in every game");}
   MiniGame pepper=new MiniGame(6,0,5);pepper.countdown=0;pepper.encounter=2;pepper.phase=1.5f;pepper.input(0);require(pepper.finished&&!pepper.won,"Pepper mistake ends the one-life final challenge");
   for(int stage:new int[]{1,5}){
    MiniGame countdown=new MiniGame(0,0,stage);for(int i=0;i<100;i++)countdown.step(.01f);require(Math.abs(countdown.countdown-1)<.002f,"Ready countdown stays real time");

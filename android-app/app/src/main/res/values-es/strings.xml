@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="fc_rule_unreachable">La partida también termina si las indicaciones restantes no permiten alcanzar el objetivo.</string>
+    <string name="fc_rule_collision">Una vida: la primera colisión u obstáculo fallido termina la partida.</string>
+    <string name="fc_rule_pepper">Comer un pimiento termina la partida. Perder un dulce cuesta una vida; un objetivo imposible también termina la partida.</string>
+    <string name="fc_rule_attempts">Tienes %1$d vidas. Cada indicación fallida cuesta una vida; la partida termina al perderlas todas.</string>
+    <string name="fc_rule_race">Llega antes que el ordenador. Si termina primero, la misión falla.</string>
+    <string name="fc_life_lost">¡Fallaste! Quedan %1$d vidas</string>
     <string name="fc_language_home_note">Elige un idioma y pulsa Aplicar. El idioma del dispositivo sigue los ajustes del teléfono.</string>
     <string name="fc_library_subtitle">Tus mejores momentos para volver a ver</string>
     <string name="fc_language_subtitle">Juega en tu idioma</string>

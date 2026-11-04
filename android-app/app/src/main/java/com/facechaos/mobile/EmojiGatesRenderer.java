@@ -213,7 +213,7 @@ final class EmojiGatesRenderer {
         float cy=safeTop+22;
         paint.setColor(0xD5304C52);canvasStageBadge(c,game,cy);
         if(game.mode==12){label(c,game.racing.playerDistance>=game.racing.rivalDistance?"1st":"2nd",18,cy+10,20,Color.WHITE,false);}
-        for(int i=0;i<(game.mode==12?0:3);i++) {
+        for(int i=0;i<(game.mode==12?0:GamePolicy.lives(game.mode,game.stage));i++) {
             float cx=25+i*26;
             path.reset();path.moveTo(cx,cy+9);
             path.cubicTo(cx-24,cy-4,cx-8,cy-18,cx,cy-7);

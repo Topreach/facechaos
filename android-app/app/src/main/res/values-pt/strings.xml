@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="fc_rule_unreachable">A rodada também termina se os comandos restantes não permitirem alcançar a meta.</string>
+    <string name="fc_rule_collision">Uma vida: a primeira colisão ou obstáculo não superado encerra a rodada.</string>
+    <string name="fc_rule_pepper">Comer uma pimenta encerra a rodada. Perder um doce custa uma vida; uma meta impossível também encerra a rodada.</string>
+    <string name="fc_rule_attempts">Você tem %1$d vidas. Cada comando perdido custa uma vida; a rodada termina quando todas acabam.</string>
+    <string name="fc_rule_race">Chegue antes do computador. Se ele terminar primeiro, a missão falha.</string>
+    <string name="fc_life_lost">Errou! Restam %1$d vidas</string>
     <string name="fc_language_home_note">Escolha um idioma e toque em Aplicar. O idioma do dispositivo segue as configurações do telefone.</string>
     <string name="fc_library_subtitle">Seus melhores momentos para rever</string>
     <string name="fc_language_subtitle">Jogue no seu idioma</string>

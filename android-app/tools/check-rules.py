@@ -9,7 +9,7 @@ root = Path(__file__).resolve().parents[1]
 source = root / "app/src/main/java/com/facechaos/mobile"
 output = root / "checks/out"
 output.mkdir(parents=True, exist_ok=True)
-classes = "AdaptiveViewport AnimalGuide AnimalPatterns CameraLook CommercialPolicy FaceGameInput FaceSignals FlagQuiz GameCatalog GameSections HeadSignals MelodyCourse MiniGame OverlayLayout PreviewGeometry RacingGame RatingPolicy SoundEvents SoundGate SpeechPolicy StageRules TeethEvidence VoiceCourse".split()
+classes = "AdaptiveViewport AnimalGuide AnimalPatterns CameraLook CommercialPolicy FaceGameInput FaceSignals FlagQuiz GameCatalog GamePolicy GameSections HeadSignals MelodyCourse MiniGame OverlayLayout PreviewGeometry RacingGame RatingPolicy SoundEvents SoundGate SpeechPolicy StageRules TeethEvidence VoiceCourse".split()
 checks = sorted((root / "checks").glob("*Check.java"))
 
 def java_tool(name):
@@ -24,7 +24,10 @@ subprocess.run([java_tool("javac"), "--release", "17", "-d", str(output), *[str(
 results = []
 failed = []
 for check in checks:
-    result = subprocess.run([java_tool("java"), "-cp", str(output), "com.facechaos.mobile." + check.stem], capture_output=True, text=True)
+    try:
+        result = subprocess.run([java_tool("java"), "-cp", str(output), "com.facechaos.mobile." + check.stem], capture_output=True, text=True, timeout=45)
+    except subprocess.TimeoutExpired:
+        result = subprocess.CompletedProcess([], 1, "", "Check exceeded 45 seconds; possible non-terminating game loop")
     status = "PASS" if result.returncode == 0 else "FAIL"
     print(f"{check.stem}: {status}", flush=True)
     results.append(f"{check.stem}: {status}\n{result.stdout}{result.stderr}")

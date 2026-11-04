@@ -4,6 +4,12 @@ import android.content.Context;
 final class AppText {
  static boolean english(Context c){return c.getResources().getConfiguration().getLocales().get(0).getLanguage().equals("en");}
  static String t(Context c,String source){switch(source){
+  case "The round also ends if the remaining cues cannot reach the target.":return c.getString(R.string.fc_rule_unreachable);
+  case "One life: the first collision or failed obstacle ends the round.":return c.getString(R.string.fc_rule_collision);
+  case "Eating a pepper ends the round. Missed treats cost a life; an unreachable target also ends the round.":return c.getString(R.string.fc_rule_pepper);
+  case "You have %1$d lives. Each missed cue costs a life; losing all lives ends the round.":return c.getString(R.string.fc_rule_attempts);
+  case "Beat the computer to the finish. If the computer finishes first, the mission fails.":return c.getString(R.string.fc_rule_race);
+  case "Missed! %1$d lives left":return c.getString(R.string.fc_life_lost);
   case "Choose your language, then tap Apply. Device language follows your phone settings.":return c.getString(R.string.fc_language_home_note);
   case "Your best moments, ready to replay":return c.getString(R.string.fc_library_subtitle);
   case "Play in your own words":return c.getString(R.string.fc_language_subtitle);

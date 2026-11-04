@@ -10,7 +10,7 @@ final class RacingGame {
  int trafficMask,rows,dodged,crashes,checkpoints,coins,result;
  boolean justCrashed;
  RacingGame(int mode,int stage,int seed){this.mode=mode;this.stage=stage;random=new java.util.Random(seed);nextTraffic();}
- int trafficRequired(){return trafficGoal()-(stage==5?0:2);}
+ int trafficRequired(){return trafficGoal();}
  float rivalBase(){return 88+(stage-1)*17;}
  int trafficGoal(){return 12+(stage-1)*2;}
  float approachTime(){return 3-(stage-1)*.2f;}
@@ -47,7 +47,7 @@ final class RacingGame {
     rows++;boolean collision=false;
     // Car width occupies .62 lane widths. Crossing a blocked lane at impact is a real collision.
     for(int i=-1;i<=1;i++)if(blocked(i)&&Math.abs(steerPosition-i)<.62f)collision=true;
-    if(collision){crashes++;justCrashed=true;}else{dodged++;coins++;}
+    if(collision){crashes++;justCrashed=true;trafficTime=approachTime();result=-1;return;}else{dodged++;coins++;}
     trafficTime=0;recovery=.45f;
     if(rows>=trafficGoal())result=dodged>=trafficRequired()?1:-1;else nextTraffic();
    }

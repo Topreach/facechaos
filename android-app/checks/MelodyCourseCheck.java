@@ -10,7 +10,7 @@ public final class MelodyCourseCheck {
   }
   for(boolean kind:kinds)require(kind,"All five obstacle families present");
   require(attempt(1,0,.35f).earnedCoin,"Gentle sound clears first challenge");require(attempt(5,0,.35f).melodyFalling,"Same gentle sound fails final height");
-  MiniGame over=attempt(4,3,1);require(over.melodyFalling&&over.feedback.contains("overhang"),"Maximum power hits actual low ceiling");
+  MiniGame over=attempt(4,3,1);require(over.finished&&!over.won&&over.melodyImpact&&over.failureReason.contains("overhang"),"Maximum power hits actual low ceiling");
   require(Math.abs(MelodyCourse.required(4,1,1.9f)-MelodyCourse.required(4,1,2.65f))>1,"Drifting ledge changes actual landing height");
   MiniGame pause=new MiniGame(4);pause.countdown=0;pause.paused=true;float x=pause.melodyLandingX();pause.step(.05f);require(pause.melodyLandingX()==x,"Pause freezes approaching course");
   System.out.println("PASS: forty controlled-power obstacle landings; five increasing height/speed tiers; approaching geometry; weak final jump, real overhang failure, drifting landing height and pause");

@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="fc_rule_unreachable">La partie se termine aussi si les consignes restantes ne permettent plus d’atteindre l’objectif.</string>
+    <string name="fc_rule_collision">Une vie : la première collision ou un obstacle raté termine la partie.</string>
+    <string name="fc_rule_pepper">Manger un piment termine la partie. Une friandise manquée coûte une vie ; un objectif devenu impossible termine aussi la partie.</string>
+    <string name="fc_rule_attempts">Vous avez %1$d vies. Chaque consigne manquée coûte une vie ; la partie se termine quand elles sont épuisées.</string>
+    <string name="fc_rule_race">Devancez l’ordinateur à l’arrivée. S’il termine en premier, la mission échoue.</string>
+    <string name="fc_life_lost">Raté ! %1$d vies restantes</string>
     <string name="fc_language_home_note">Choisissez une langue, puis touchez Appliquer. La langue de l’appareil suit les réglages du téléphone.</string>
     <string name="fc_library_subtitle">Vos meilleurs moments à revoir</string>
     <string name="fc_language_subtitle">Jouez dans votre langue</string>

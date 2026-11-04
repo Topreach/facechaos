@@ -1,6 +1,7 @@
 package com.facechaos.mobile;
 import android.content.Context;
 final class GameLanguage {
+ static String policy(Context c,MiniGame g){return g.mode==12?c.getString(R.string.fc_rule_race):g.mode==6?c.getString(R.string.fc_rule_pepper):GamePolicy.singleLife(g.mode)?c.getString(R.string.fc_rule_collision):c.getString(R.string.fc_rule_attempts,g.hearts)+((g.mode==9||g.mode==11)?" "+c.getString(R.string.fc_rule_unreachable):"");}
  static String action(Context c,MiniGame g){
   int id;
   if(g.finished)return g.stopped?c.getString(R.string.fc_stopped):g.won?(g.stage<5?c.getString(R.string.fc_stage_complete,g.stage):c.getString(R.string.fc_all_complete)):c.getString(R.string.fc_failed);
@@ -8,6 +9,7 @@ final class GameLanguage {
   if(g.faceBlocked())return c.getString(g.mode==13?R.string.fc_centre_head:R.string.fc_find_face);
   if(g.microphoneMode&&!g.micReady)return c.getString(R.string.fc_calibrating);
   if(g.countdown>0)return c.getString(R.string.fc_ready,(int)Math.ceil(g.countdown));
+  if(g.missNotice>0)return c.getString(R.string.fc_life_lost,g.hearts);
   if(g.earnedCoin&&g.flash>0)return c.getString(R.string.fc_good);
   if(g.resolved&&(g.mode==8&&!g.cometLanded||g.mode==7&&g.stackDropping&&!g.stackLanded))return c.getString(R.string.fc_relax_next);
   if(g.resolved)return c.getString(g.melodyFalling||!g.earnedCoin?R.string.fc_follow_cue:R.string.fc_relax_next);

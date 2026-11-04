@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="fc_rule_unreachable">The round also ends if the remaining cues cannot reach the target.</string>
+    <string name="fc_rule_collision">One life: the first collision or failed obstacle ends the round.</string>
+    <string name="fc_rule_pepper">Eating a pepper ends the round. Missed treats cost a life; an unreachable target also ends the round.</string>
+    <string name="fc_rule_attempts">You have %1$d lives. Each missed cue costs a life; losing all lives ends the round.</string>
+    <string name="fc_rule_race">Beat the computer to the finish. If the computer finishes first, the mission fails.</string>
+    <string name="fc_life_lost">Missed! %1$d lives left</string>
     <string name="fc_language_home_note">Choose your language, then tap Apply. Device language follows your phone settings.</string>
     <string name="fc_library_subtitle">Your best moments, ready to replay</string>
     <string name="fc_language_subtitle">Play in your own words</string>

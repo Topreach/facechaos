@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="fc_rule_unreachable">تنتهي الجولة أيضاً إذا لم تعد الإشارات المتبقية كافية لتحقيق الهدف.</string>
+    <string name="fc_rule_collision">حياة واحدة: أول اصطدام أو عقبة فاشلة ينهي الجولة.</string>
+    <string name="fc_rule_pepper">أكل الفلفل ينهي الجولة. تفويت الحلوى يكلفك حياة، وتنتهي الجولة إذا أصبح الهدف مستحيلاً.</string>
+    <string name="fc_rule_attempts">لديك %1$d محاولات. كل إشارة فائتة تكلفك محاولة، وتنتهي الجولة عند نفادها.</string>
+    <string name="fc_rule_race">اسبق الكمبيوتر إلى خط النهاية. إذا وصل الكمبيوتر أولاً تفشل المهمة.</string>
+    <string name="fc_life_lost">لم تنجح! تبقى %1$d محاولات</string>
     <string name="fc_language_home_note">اختر لغتك ثم اضغط تطبيق. لغة الجهاز تتبع إعدادات هاتفك.</string>
     <string name="fc_library_subtitle">أفضل لحظاتك، جاهزة للمشاهدة</string>
     <string name="fc_language_subtitle">العب بلغتك</string>

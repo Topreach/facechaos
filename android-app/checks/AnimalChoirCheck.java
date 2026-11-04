@@ -24,7 +24,7 @@ public final class AnimalChoirCheck {
   signal(dropout,.20f,true);signal(dropout,.4f,false);require(dropout.coins==1,"Two real calls still complete the dog rhythm");
   MiniGame shortcut=new MiniGame(9);shortcut.countdown=0;shortcut.input(shortcut.target());require(shortcut.score==0&&shortcut.coins==0,"Direct button input cannot bypass the rhythm");
   MiniGame demo=new MiniGame(9);demo.countdown=0;demo.animalDemoPlaying=true;for(int i=0;i<100;i++)demo.step(.01f);require(demo.phase==0&&demo.coins==0,"Demo never advances or scores the round");demo.animalDemoPlaying=false;demo.soundPulses=1;demo.phase=2;demo.resetAnimalAttempt();require(demo.soundPulses==0&&demo.phase==0&&demo.hearts==3,"Replaying a guide resets the partial attempt without punishment");
-  MiniGame cat=new MiniGame(9);cat.countdown=0;cat.encounter=1;cat.microphoneMode=true;cat.micReady=true;signal(cat,.25f,false);signal(cat,.15f,true);signal(cat,.2f,false);require(cat.coins==0&&cat.hearts==2&&cat.feedback.contains("meow"),"Short meow gets specific corrective feedback");
+  MiniGame cat=new MiniGame(9);cat.countdown=0;cat.encounter=1;cat.score=cat.coins=1;cat.microphoneMode=true;cat.micReady=true;signal(cat,.25f,false);signal(cat,.15f,true);signal(cat,.2f,false);require(cat.coins==1&&cat.hearts==2&&cat.feedback.contains("meow"),"Short meow gets specific corrective feedback");
   System.out.println("PASS: 48 PCM-driven animal cues across five stage wins, calibration freeze, brief-dropout tolerance, correct durations/counts, demo isolation, no scoring shortcut and useful failure feedback");
  }
 }

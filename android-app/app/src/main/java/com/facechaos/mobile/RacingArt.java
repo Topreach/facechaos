@@ -54,7 +54,7 @@ final class RacingArt {
    if(r.recovery<=0)for(int lane=-1;lane<=1;lane++)if(r.blocked(lane))car(c,195+lane*(35+83*t*t),y,width,lane==0?0xFFF5A566:0xFFEA7CA6,true,"");
    car(c,195+r.steerPosition*118,bottom-12,57,0xFF2BC9C8,false,"YOU");
    if(g.flash>0&&!g.earnedCoin&&r.crashes>0){p.setColor(0x77FFAD95);c.drawCircle(195+r.steerPosition*118,bottom-60,43,p);}
-   label(c,"Cleared "+r.dodged+"/"+r.trafficRequired()+" - wave "+Math.min(r.trafficGoal(),r.rows+1)+"/"+r.trafficGoal(),195,bottom+34,12,Color.WHITE);
+   label(c,"Cleared "+r.dodged+"/"+r.trafficRequired()+" - wave "+Math.min(r.trafficGoal(),r.rows+(r.result==0?1:0))+"/"+r.trafficGoal(),195,bottom+34,12,Color.WHITE);
   }
   if(!g.finished){
    float y=safeTop+82;p.setColor(0xF5EDF7FF);c.drawRoundRect(20,y,370,y+88,20,20,p);
